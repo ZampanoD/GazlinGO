@@ -1,0 +1,61 @@
+services:
+  db:
+    build:
+      context: ./db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    environment:
+      - POSTGRES_DB=minerals
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=404118
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./storage:/app/storage
+    networks:
+      - app-network
+    environment:
+      - DOCKER_ENV=true
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=404118
+      - DB_NAME=minerals
+      - JWT_SECRET=your_jwt_secret
+      - STORAGE_PATH=/app/storage
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    environment:
+      - VITE_API_URL=http://localhost:8080
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

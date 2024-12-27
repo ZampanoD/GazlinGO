@@ -1,0 +1,53 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-navigation-menu": "^1.2.3",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@react-three/drei": "^9.120.4",
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/postprocessing": "^2.16.3",
+    "@types/axios": "^0.14.0",
+    "@types/three": "^0.171.0",
+    "axios": "^0.27.2",
+    "framer-motion": "^11.15.0",
+    "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
+    "react-router-dom": "^7.1.0",
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.171.0",
+    "three-stdlib": "^2.35.2",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/lodash": "^4.17.13",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "@types/tailwindcss": "^3.0.11",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.13.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.1",
+    "vite": "^6.0.3"
+  }
+}
