@@ -43,9 +43,8 @@ func (h *Handler) Routes(app *fiber.App) {
 		CacheDuration: 10 * time.Second,
 	})
 
-
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173", // URL вашего frontend
+		AllowOrigins: "http://localhost:5173",
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 	}))
@@ -58,7 +57,7 @@ func (h *Handler) Routes(app *fiber.App) {
 	favorites := v1.Group("/favorites", middleware.AuthMiddleware())
 	favorites.Post("/:id", h.AddToFavorites)
 	favorites.Delete("/:id", h.RemoveFromFavorites)
-	// Остальные маршруты остаются без изменений
+
 	minerals := v1.Group("/minerals")
 	minerals.Get("", h.GetAllMinerals)
 	minerals.Get("/:id", h.GetMineralByID)
@@ -118,8 +117,8 @@ func (h *Handler) GetMineralByID(c *fiber.Ctx) error {
 }
 
 func (h *Handler) CreateMineral(c *fiber.Ctx) error {
-	modelDir := "/storage/models"
-	previewDir := "/storage/previews"
+	modelDir := "/app/storage/models"
+	previewDir := "/app/storage/previews"
 
 	if err := os.MkdirAll(modelDir, os.ModePerm); err != nil {
 		log.Printf("Ошибка при создании директории модели: %v", err)
@@ -152,8 +151,8 @@ func (h *Handler) CreateMineral(c *fiber.Ctx) error {
 	mineral := &models.Mineral{
 		Title:            title,
 		Description:      description,
-		ModelPath:        modelPath,        // URL путь
-		PreviewImagePath: previewImagePath, // URL путь
+		ModelPath:        modelPath,
+		PreviewImagePath: previewImagePath,
 		CreatedAt:        time.Now(),
 	}
 
@@ -238,7 +237,7 @@ func (h *Handler) DeleteMineral(c *fiber.Ctx) error {
 		return errors.SendError(c, errors.ErrServerError)
 	}
 
-	baseDir := "/storage"
+	baseDir := "/app/storage"
 	modelFilePath := filepath.Join(baseDir, strings.TrimPrefix(mineral.ModelPath, "/storage"))
 	previewFilePath := filepath.Join(baseDir, strings.TrimPrefix(mineral.PreviewImagePath, "/storage"))
 
@@ -267,10 +266,6 @@ func (h *Handler) SearchMineral(c *fiber.Ctx) error {
 
 	if query == "" {
 		return errors.SendError(c, errors.ErrInvalidInput("поисковый запрос не может быть пустым"))
-	}
-
-	if len(query) < 2 {
-		return errors.SendError(c, errors.ErrInvalidInput("минимальная длина поискового запроса - 2 символа"))
 	}
 
 	minerals, err := h.db.SearchMineralByTitle(query)

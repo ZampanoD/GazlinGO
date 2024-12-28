@@ -16,8 +16,9 @@ import (
 )
 
 const (
-	ModelsDir        = "/app/storage/models"
-	PreviewsDir      = "/app/storage/previews"
+	StoragePath      = "/app/storage"
+	ModelsDir        = "/models"
+	PreviewsDir      = "/previews"
 	MaxFileSize      = 50 << 20
 	AllowedModelExt  = ".glb"
 	AllowedImageExts = ".jpg,.jpeg,.png"
@@ -28,11 +29,11 @@ type FileService struct {
 }
 
 func NewFileService(basePath string) (*FileService, error) {
-	log.Printf("Инициализация FileService с путем: %s", basePath)
+	log.Printf("Инициализация FileService с путем: %s", StoragePath)
 
 	dirs := []string{
-		filepath.Join(basePath, ModelsDir),
-		filepath.Join(basePath, PreviewsDir),
+		filepath.Join(StoragePath, ModelsDir),
+		filepath.Join(StoragePath, PreviewsDir),
 	}
 
 	for _, dir := range dirs {
@@ -43,7 +44,7 @@ func NewFileService(basePath string) (*FileService, error) {
 		}
 	}
 
-	return &FileService{basePath: basePath}, nil
+	return &FileService{basePath: StoragePath}, nil
 }
 
 func (fs *FileService) SaveModel(file *multipart.FileHeader) (string, error) {
@@ -74,43 +75,36 @@ func (fs *FileService) SavePreview(file *multipart.FileHeader) (string, error) {
 func (fs *FileService) saveFile(file *multipart.FileHeader, dir string) (string, error) {
 	src, err := file.Open()
 	if err != nil {
+		log.Printf("Ошибка открытия файла: %v", err)
 		return "", errors.ErrFileOperation("не удалось открыть файл")
 	}
 	defer src.Close()
 
+	fullPath := filepath.Join(StoragePath, dir, file.Filename)
+	log.Printf("Attempting to save file at: %s", fullPath)
 
-	fullPath := filepath.Join("/app", dir, file.Filename)
-	log.Printf("Saving file to full path: %s", fullPath)
+	dirPath := filepath.Dir(fullPath)
+	if err := os.MkdirAll(dirPath, 0755); err != nil {
+		log.Printf("Ошибка создания директории: %v", err)
+		return "", errors.ErrFileOperation(fmt.Sprintf("не удалось создать директорию: %v", err))
+	}
 
 	dst, err := os.Create(fullPath)
 	if err != nil {
-		log.Printf("Error creating file: %v", err)
+		log.Printf("Ошибка создания файла: %v", err)
 		return "", errors.ErrFileOperation(fmt.Sprintf("не удалось создать файл: %v", err))
 	}
 	defer dst.Close()
 
-	if _, err = io.Copy(dst, src); err != nil {
-		log.Printf("Error copying file: %v", err)
+	written, err := io.Copy(dst, src)
+	if err != nil {
+		log.Printf("Ошибка копирования файла: %v", err)
 		return "", errors.ErrFileOperation(fmt.Sprintf("не удалось сохранить файл: %v", err))
 	}
+	log.Printf("Successfully written %d bytes to %s", written, fullPath)
 
-
-	urlPath := filepath.Join("/storage", strings.TrimPrefix(dir, "/app/storage"), file.Filename)
-	log.Printf("File saved, URL path: %s", urlPath)
+	urlPath := filepath.Join("/storage", dir, file.Filename)
+	log.Printf("URL path for file: %s", urlPath)
 
 	return urlPath, nil
-}
-
-func (fs *FileService) DeleteFile(filePath string) error {
-	if filePath == "" {
-		return nil
-	}
-
-	fullPath := filepath.Join(fs.basePath, filePath)
-	err := os.Remove(fullPath)
-	if err != nil && !os.IsNotExist(err) {
-		return errors.ErrFileOperation(fmt.Sprintf("не удалось удалить файл: %s", filePath))
-	}
-
-	return nil
 }
