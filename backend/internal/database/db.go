@@ -1,3 +1,7 @@
+//Модуль подключения и конфигурации базы данных PostgreSQL, реализующий паттерн репозитория.
+//Обеспечивает гибкую настройку параметров подключения через переменные окружения с поддержкой как локального развертывания,
+//так и работы в Docker-контейнере. Включает базовую обработку ошибок и управление пулом соединений для оптимальной производительности.
+
 package database
 
 import (
@@ -8,7 +12,6 @@ import (
 	"log"
 	"os"
 )
-
 
 var (
 	ErrMineralNotFound   = errors.New("mineral not found")
@@ -24,7 +27,6 @@ type Config struct {
 	Password string
 	DBName   string
 }
-
 
 func GetConfig() Config {
 	if os.Getenv("DOCKER_ENV") == "true" {
@@ -46,7 +48,6 @@ func GetConfig() Config {
 	}
 }
 
-
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
@@ -54,17 +55,14 @@ func getEnv(key, defaultValue string) string {
 	return defaultValue
 }
 
-
 type Database struct {
 	DB *sql.DB
 }
-
 
 func (c Config) GetDSN() string {
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		c.Host, c.Port, c.User, c.Password, c.DBName)
 }
-
 
 func NewDatabase() (*Database, error) {
 	config := GetConfig()
@@ -75,20 +73,17 @@ func NewDatabase() (*Database, error) {
 		return nil, fmt.Errorf("error opening database: %v", err)
 	}
 
-
 	if err = db.Ping(); err != nil {
 		return nil, fmt.Errorf("error connecting to the database: %v", err)
 	}
 
 	log.Printf("Successfully connected to database")
 
-
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(25)
 
 	return &Database{DB: db}, nil
 }
-
 
 func (db *Database) Close() error {
 	if db.DB != nil {
