@@ -152,7 +152,7 @@ func (db *Database) SearchMineralByTitle(query string) ([]models.Mineral, error)
         WHERE title ILIKE $1
         ORDER BY title ASC
     `
-	searchPattern := "%" + query + "%"
+	searchPattern := query + "%"
 	rows, err := db.DB.Query(sqlQuery, searchPattern)
 	if err != nil {
 		return nil, err

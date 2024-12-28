@@ -26,8 +26,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - ./storage:/app/storage
+
     networks:
       - app-network
     environment:
@@ -55,6 +54,7 @@ services:
 
 volumes:
   postgres_data:
+
 
 networks:
   app-network:
