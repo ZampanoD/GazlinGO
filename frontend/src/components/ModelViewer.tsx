@@ -9,6 +9,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Grid } from '@react-three/drei';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three-stdlib';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ModelViewerProps {
     modelPath: string;
@@ -117,7 +118,9 @@ const Model: React.FC<{
 
     useEffect(() => {
         const loader = new GLTFLoader();
-        const fullModelPath = `http://localhost:8080${url}`;
+        const fullModelPath = `http://localhost:8080${url}`
+        console.log('Model path:', fullModelPath);
+
 
         loader.load(
             fullModelPath,
@@ -231,9 +234,10 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     const [enhancedLighting, setEnhancedLighting] = useState(false);
     const [showGrid, setShowGrid] = useState(false);
     const [darkTheme, setDarkTheme] = useState(false);
+    const { t } = useLanguage();
 
     const handleError = (errorMessage: string) => {
-        setError(`Ошибка загрузки модели: ${errorMessage}`);
+        setError(`${t('error')}: ${errorMessage}`);
     };
 
     if (error) {
@@ -253,22 +257,22 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
                 <ToggleSwitch
                     isOn={autoRotate}
                     onToggle={() => setAutoRotate(!autoRotate)}
-                    label="Вращение"
+                    label="AutoRotate"
                 />
                 <ToggleSwitch
                     isOn={enhancedLighting}
                     onToggle={() => setEnhancedLighting(!enhancedLighting)}
-                    label="Освещение"
+                    label="Lighting"
                 />
                 <ToggleSwitch
                     isOn={showGrid}
                     onToggle={() => setShowGrid(!showGrid)}
-                    label="Сетка"
+                    label="Grid"
                 />
                 <ToggleSwitch
                     isOn={darkTheme}
                     onToggle={() => setDarkTheme(!darkTheme)}
-                    label="Темная тема"
+                    label="Dark Theme"
                 />
             </ControlPanel>
 
@@ -301,5 +305,6 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         </div>
     );
 };
+
 
 export default ModelViewer;

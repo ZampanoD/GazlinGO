@@ -11,6 +11,7 @@ import (
 	"backend/internal/database"
 	"backend/internal/models"
 	"backend/internal/service/file"
+	"backend/internal/service/translation"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -23,14 +24,16 @@ import (
 )
 
 type Handler struct {
-	db          *database.Database
-	fileService *file.FileService
+	db                 *database.Database
+	fileService        *file.FileService
+	translationService *translation.TranslationService
 }
 
-func New(db *database.Database, fileService *file.FileService) *Handler {
+func New(db *database.Database, fileService *file.FileService, translationService *translation.TranslationService) *Handler {
 	return &Handler{
-		db:          db,
-		fileService: fileService,
+		db:                 db,
+		fileService:        fileService,
+		translationService: translationService,
 	}
 }
 
