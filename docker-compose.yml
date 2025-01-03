@@ -26,6 +26,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      translate:
+          condition: service_started
 
     networks:
       - app-network
@@ -51,6 +53,14 @@ services:
       - app-network
     environment:
       - VITE_API_URL=http://localhost:8080
+  translate:
+    image: thedaviddelta/lingva-translate
+    pull_policy: always
+    ports:
+      - "5050:3000"
+    networks:
+      - app-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
@@ -59,3 +69,4 @@ volumes:
 networks:
   app-network:
     driver: bridge
+

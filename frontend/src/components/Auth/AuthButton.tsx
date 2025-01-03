@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react'
 import { api, AxiosError } from '../../services/api'
 import { useAuth } from '../../hooks/useAuth'
 import { useEscapeKey } from '../../hooks/useEscapeKey'
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface LoginResponse {
     token: string
@@ -14,27 +15,28 @@ interface LoginResponse {
 
 const ConfirmLogout = ({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) => {
     useEscapeKey(onCancel);
+    const { t } = useLanguage();
 
     return (
         <div className="fixed inset-0 flex items-center justify-center" style={{ zIndex: 1000 }}>
             <div className="fixed inset-0 bg-black bg-opacity-50" style={{ zIndex: 1000 }}></div>
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full mx-4 relative" style={{ zIndex: 1001 }}>
-                <h2 className="text-xl font-bold mb-4">Подтверждение выхода</h2>
+                <h2 className="text-xl font-bold mb-4">{t('logoutConfirmation')}</h2>
                 <p className="text-gray-600 mb-6">
-                    Вы уверены, что хотите выйти из аккаунта?
+                    {t('logoutConfirmationText')}
                 </p>
                 <div className="flex justify-end space-x-3">
                     <button
                         onClick={onCancel}
                         className="px-4 py-2 rounded text-gray-600 hover:bg-gray-100 transition-colors"
                     >
-                        Отмена
+                        {t('cancel')}
                     </button>
                     <button
                         onClick={onConfirm}
                         className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
                     >
-                        Выйти
+                        {t('logout')}
                     </button>
                 </div>
             </div>
@@ -54,24 +56,25 @@ export const AuthButton = () => {
     const [error, setError] = useState('')
     const dropdownRef = useRef<HTMLDivElement>(null)  // добавляем ref для дропдауна
     const buttonRef = useRef<HTMLButtonElement>(null)
+    const { t } = useLanguage();
 
     const currentUser = localStorage.getItem('username')
 
     const validateForm = () => {
         if (!username.trim()) {
-            setError('Введите имя пользователя')
+            setError(t('enterUsername'))
             return false
         }
         if (!password.trim()) {
-            setError('Введите пароль')
+            setError(t('enterPassword'))
             return false
         }
         if (!isLogin && password.length < 6) {
-            setError('Пароль должен быть не менее 6 символов')
+            setError(t('passwordLength'))
             return false
         }
         if (!isLogin && password !== confirmPassword) {
-            setError('Пароли не совпадают')
+            setError(t('passwordsNotMatch'))
             return false
         }
         setError('')
@@ -181,7 +184,7 @@ export const AuthButton = () => {
                         onClick={handleButtonClick}
                         className="text-slate-700 hover:text-slate-900 font-medium"
                     >
-                        {currentUser || 'Пользователь'}
+                        {currentUser || t('user')}
                     </button>
                     {showDropdown && (
                         <div
@@ -196,7 +199,7 @@ export const AuthButton = () => {
                                 }}
                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                             >
-                                Выйти
+                                {t('logout')}
                             </button>
                         </div>
                     )}
@@ -206,9 +209,8 @@ export const AuthButton = () => {
                     <button
                         onClick={() => setShowModal(true)}
                         className="bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 text-white px-6 py-2 rounded-lg shadow transition-colors"
-
                     >
-                        Войти
+                        {t('login')}
                     </button>
 
                     {showModal && (
@@ -216,13 +218,13 @@ export const AuthButton = () => {
                             <div className="fixed inset-0 bg-black bg-opacity-50" style={{ zIndex: 1000 }}></div>
                             <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative" style={{ zIndex: 1001 }}>
                                 <h2 className="text-xl font-bold mb-4">
-                                    {isLogin ? 'Авторизация' : 'Регистрация'}
+                                    {isLogin ? t('loginTitle') : t('registerTitle')}
                                 </h2>
                                 <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
                                     <div>
                                         <input
                                             type="text"
-                                            placeholder="Логин"
+                                            placeholder={t('username')}
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
                                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -231,7 +233,7 @@ export const AuthButton = () => {
                                     <div>
                                         <input
                                             type="password"
-                                            placeholder="Пароль"
+                                            placeholder={t('password')}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -241,7 +243,7 @@ export const AuthButton = () => {
                                         <div>
                                             <input
                                                 type="password"
-                                                placeholder="Повторите пароль"
+                                                placeholder={t('confirmPassword')}
                                                 value={confirmPassword}
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                                 className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -253,16 +255,15 @@ export const AuthButton = () => {
                                         <button
                                             type="submit"
                                             className="bg-gradient-to-r from-blue-500 via-purple-600 to-indigo-500 hover:from-blue-600 hover:via-purple-700 hover:to-indigo-600 text-white px-6 py-2 rounded transition-colors"
-
                                         >
-                                            {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                                            {isLogin ? t('loginButton') : t('registerButton')}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={closeModal}
                                             className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
                                         >
-                                            Отмена
+                                            {t('cancel')}
                                         </button>
                                     </div>
                                     <button
@@ -273,7 +274,7 @@ export const AuthButton = () => {
                                         }}
                                         className="text-blue-500 hover:text-blue-600 text-sm w-full"
                                     >
-                                        {isLogin ? 'Создать аккаунт' : 'Уже есть аккаунт?'}
+                                        {isLogin ? t('createAccount') : t('haveAccount')}
                                     </button>
                                 </form>
                             </div>
@@ -281,7 +282,6 @@ export const AuthButton = () => {
                     )}
                 </>
             )}
-
 
             {showLogoutConfirm && (
                 <ConfirmLogout
@@ -296,7 +296,8 @@ export const AuthButton = () => {
                 />
             )}
         </div>
-    )
-}
+    );
+};
+
 
 export default AuthButton;

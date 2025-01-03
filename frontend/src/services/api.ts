@@ -23,3 +23,8 @@ export const addToFavorites = (mineralId: number) =>
 
 export const removeFromFavorites = (mineralId: number) =>
     api.delete(`/favorites/${mineralId}`);
+
+export const getAvailableLanguages = () => api.get('/languages');
+export const getTranslatedMinerals = (lang: string) => api.get(`/minerals-translated?lang=${lang}`);
+export const getTranslatedMineral = (id: number, lang: string) =>
+    api.get(`/minerals-translated/${id}?lang=${lang}`);

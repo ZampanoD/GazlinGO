@@ -9,6 +9,7 @@ import { api, AxiosError } from '../services/api'
 import { useAuth } from '../hooks/useAuth'
 import { useNotification } from '../components/Notification/NotificationContext'
 import { useEscapeKey } from '../hooks/useEscapeKey'
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface MineralFormProps {
     onClose: () => void;
@@ -22,6 +23,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
     const [preview, setPreview] = useState<File | null>(null)
     const { showNotification } = useNotification()
     const { isAdmin } = useAuth()
+    const { t } = useLanguage();
 
     useEscapeKey(onClose);
 
@@ -33,22 +35,22 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
         e.preventDefault()
 
         if (!title.trim()) {
-            showNotification('Введите название минерала', 'error')
+            showNotification(t('enterMineralNameError'), 'error')
             return
         }
 
         if (!description.trim()) {
-            showNotification('Введите описание минерала', 'error')
+            showNotification(t('enterDescriptionError'), 'error')
             return
         }
 
         if (!model) {
-            showNotification('Загрузите 3D модель', 'error')
+            showNotification(t('uploadModelError'), 'error')
             return
         }
 
         if (!preview) {
-            showNotification('Загрузите изображение превью', 'error')
+            showNotification(t('uploadPreviewError'), 'error')
             return
         }
 
@@ -65,7 +67,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                 }
             })
 
-            showNotification('Минерал успешно добавлен', 'success')
+            showNotification(t('mineralAddSuccess'), 'success')
             setTitle('')
             setDescription('')
             setModel(null)
@@ -73,9 +75,9 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
             onSuccess()
         } catch (error) {
             if (error instanceof AxiosError && error.response?.data.error) {
-                showNotification(`Ошибка: ${error.response.data.error}`, 'error')
+                showNotification(`${t('error')}: ${error.response.data.error}`, 'error')
             } else {
-                showNotification('Произошла неизвестная ошибка при добавлении минерала', 'error')
+                showNotification(t('unknownError'), 'error')
             }
         }
     }
@@ -84,7 +86,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
         const file = e.target.files?.[0]
         if (file) {
             if (!file.name.toLowerCase().endsWith('.glb')) {
-                showNotification('Пожалуйста, выберите файл формата .glb', 'error')
+                showNotification(t('invalidModelFormat'), 'error')
                 e.target.value = ''
                 return
             }
@@ -96,7 +98,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
         const file = e.target.files?.[0]
         if (file) {
             if (!file.type.startsWith('image/')) {
-                showNotification('Пожалуйста, выберите файл изображения', 'error')
+                showNotification(t('invalidImageFormat'), 'error')
                 e.target.value = ''
                 return
             }
@@ -108,19 +110,19 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
         <div className="fixed inset-0 flex items-center justify-center" style={{ zIndex: 1000 }}>
             <div className="fixed inset-0 bg-black bg-opacity-50" style={{ zIndex: 1000 }}></div>
             <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto relative" style={{ zIndex: 1001 }}>
-                <h2 className="text-xl font-bold mb-4">Добавление нового минерала</h2>
+                <h2 className="text-xl font-bold mb-4">{t('addMineral')}</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium mb-1">
-                            Название <span className="text-red-500">*</span>
+                            {t('mineralName')} <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Введите название минерала"
+                            placeholder={t('enterMineralName')}
                         />
                     </div>
 
@@ -132,13 +134,13 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             className="border p-2 rounded w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Введите описание минерала"
+                            placeholder={t('enterDescription')}
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium mb-1">
-                            3D Модель (.glb) <span className="text-red-500">*</span>
+                            {t('modelLabel')} <span className="text-red-500">{t('requiredField')}</span>
                         </label>
                         <input
                             type="file"
@@ -151,7 +153,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
 
                     <div>
                         <label className="block text-sm font-medium mb-1">
-                            Превью <span className="text-red-500">*</span>
+                            {t('previewLabel')} <span className="text-red-500">{t('requiredField')}</span>
                         </label>
                         <input
                             type="file"
@@ -159,7 +161,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             onChange={handlePreviewChange}
                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <p className="text-xs text-gray-500 mt-1">Рекомендуемый размер: 200x200px</p>
+                        <p className="text-xs text-gray-500 mt-1">{t('recommendedSize')}</p>
                     </div>
 
                     <div className="flex justify-between gap-2 mt-6">
@@ -167,7 +169,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             type="submit"
                             className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
                         >
-                            Добавить минерал
+                            {t('addMineral')}
                         </button>
 
                         <button
@@ -175,7 +177,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             onClick={onClose}
                             className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >
-                            Закрыть
+                            {t('close')}
                         </button>
                     </div>
                 </form>
