@@ -80,7 +80,6 @@ const Layout = () => {
             setMinerals(minerals);
         } catch (error) {
             console.error('Ошибка загрузки минералов:', error);
-            showNotification(t('errorLoadingMinerals'), 'error');
         } finally {
             setIsLoading(false);
         }
@@ -300,26 +299,30 @@ const Layout = () => {
 
                     <div
                         className={`h-[500px] rounded-lg bg-slate-50 mb-8 ${!selectedMineral ? 'max-w-[800px] mx-auto' : ''}`}>
+
                         <ErrorBoundary>
-                            {selectedMineral && (
+                            {selectedMineral ? (
                                 <ModelViewer
                                     modelPath={selectedMineral.model_path}
                                     mineralId={selectedMineral.id}
                                     isFavorite={selectedMineral.isFavorite}
                                     onFavoriteToggle={handleFavoriteToggle}
                                     isAuthenticated={isAuthenticated}
+                                    isDefaultModel={false}
+                                />
+                            ) : (
+                                <ModelViewer
+                                    isAuthenticated={isAuthenticated}
+                                    isDefaultModel={true}
                                 />
                             )}
-                            {!selectedMineral && (
-                                <p className="flex items-center justify-center h-full text-slate-500">
-                                    {t('selectMineral')}
-                                </p>
-                            )}
-
                         </ErrorBoundary>
                     </div>
 
-                    <h2 className="text-xl font-bold text-slate-900 mb-4">{t('description')}</h2>
+                    <div className="flex justify-center">
+                        <h2 className="text-xl font-bold text-slate-900 mb-4">{t('description')}</h2>
+                    </div>
+
                     <p className="text-slate-700">
                         {selectedMineral ? selectedMineral.description : t('selectMineral')}
                     </p>

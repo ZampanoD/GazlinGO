@@ -4,6 +4,7 @@
 //Поддерживает добавление в избранное для авторизованных пользователей с анимированной звездочкой и панель управления с настройками визуализации.
 // Особое внимание уделено производительности через использование Suspense и правильную обработку ресурсов Three.js.
 
+
 import React, { useEffect, useState, Suspense, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Grid } from '@react-three/drei';
@@ -11,16 +12,24 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { useLanguage } from '../contexts/LanguageContext';
 
+interface DefaultModelConfig {
+    path: string;
+    title: string;
+}
+
+const DEFAULT_MODEL: DefaultModelConfig = {
+    path: '/assets/Goblin_head.glb',
+    title: 'GazlinGO Demo Model'
+};
+
 interface ModelViewerProps {
-    modelPath: string;
-    mineralId: number;
+    modelPath?: string;
+    mineralId?: number;
     isFavorite?: boolean;
     onFavoriteToggle?: (mineralId: number) => void;
     isAuthenticated: boolean;
+    isDefaultModel?: boolean;
 }
-
-
-
 
 const FavoriteStar = ({ isFavorite, onClick, isDarkTheme }: {
     isFavorite: boolean;
@@ -61,9 +70,6 @@ const FavoriteStar = ({ isFavorite, onClick, isDarkTheme }: {
         </button>
     );
 };
-
-
-
 
 const ToggleSwitch = ({ isOn, onToggle, label }: { isOn: boolean; onToggle: () => void; label: string }) => (
     <div className="relative inline-block">
@@ -118,9 +124,8 @@ const Model: React.FC<{
 
     useEffect(() => {
         const loader = new GLTFLoader();
-        const fullModelPath = `http://localhost:8080${url}`
-        console.log('Model path:', fullModelPath);
-
+        const fullModelPath = url.startsWith('/storage') ? `http://localhost:8080${url}` : url;
+        console.log('Loading model from path:', fullModelPath);
 
         loader.load(
             fullModelPath,
@@ -131,12 +136,20 @@ const Model: React.FC<{
                         child.receiveShadow = true;
                     }
                 });
+
+
+                const box = new THREE.Box3().setFromObject(gltf.scene);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 2 / maxDim;
+
+                gltf.scene.position.copy(center.multiplyScalar(-1));
+                gltf.scene.scale.setScalar(scale);
+
                 setScene(gltf.scene);
             },
-            (progress) => {
-                const percentComplete = (progress.loaded / progress.total) * 100;
-                console.log(`Loading model: ${percentComplete.toFixed(0)}%`);
-            },
+            undefined,
             (error) => {
                 console.error('Error loading model:', error);
                 onError(error.message);
@@ -227,7 +240,8 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
                                                      mineralId,
                                                      isFavorite = false,
                                                      onFavoriteToggle,
-                                                     isAuthenticated
+                                                     isAuthenticated,
+                                                     isDefaultModel = false
                                                  }) => {
     const [error, setError] = useState<string | null>(null);
     const [autoRotate, setAutoRotate] = useState(false);
@@ -240,13 +254,16 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         setError(`${t('error')}: ${errorMessage}`);
     };
 
+    const currentModelPath = isDefaultModel ? DEFAULT_MODEL.path : (modelPath || DEFAULT_MODEL.path);
+    console.log('ModelViewer using path:', currentModelPath);
+
     if (error) {
         return <div className="flex justify-center items-center h-full text-red-500">{error}</div>;
     }
 
     return (
         <div className="relative w-full h-full border-2 border-gray-200 rounded-lg">
-            {isAuthenticated && onFavoriteToggle && (
+            {isAuthenticated && onFavoriteToggle && mineralId && !isDefaultModel && (
                 <FavoriteStar
                     isFavorite={isFavorite}
                     onClick={() => onFavoriteToggle(mineralId)}
@@ -257,22 +274,22 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
                 <ToggleSwitch
                     isOn={autoRotate}
                     onToggle={() => setAutoRotate(!autoRotate)}
-                    label="AutoRotate"
+                    label={t('AutoRotate')}
                 />
                 <ToggleSwitch
                     isOn={enhancedLighting}
                     onToggle={() => setEnhancedLighting(!enhancedLighting)}
-                    label="Lighting"
+                    label={t('Lighting')}
                 />
                 <ToggleSwitch
                     isOn={showGrid}
                     onToggle={() => setShowGrid(!showGrid)}
-                    label="Grid"
+                    label={t('Grid')}
                 />
                 <ToggleSwitch
                     isOn={darkTheme}
                     onToggle={() => setDarkTheme(!darkTheme)}
-                    label="Dark Theme"
+                    label={t('DarkTheme')}
                 />
             </ControlPanel>
 
@@ -285,7 +302,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
                 <Suspense fallback={<LoadingSpinner/>}>
                     <Lights enhanced={enhancedLighting} />
                     <Model
-                        url={modelPath}
+                        url={currentModelPath}
                         autoRotate={autoRotate}
                         onError={handleError}
                     />
@@ -305,6 +322,5 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         </div>
     );
 };
-
 
 export default ModelViewer;

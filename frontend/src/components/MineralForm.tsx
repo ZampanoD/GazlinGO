@@ -148,7 +148,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             onChange={handleModelChange}
                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <p className="text-xs text-gray-500 mt-1">Только файлы формата .glb</p>
+                        <p className="text-xs text-gray-500 mt-1">{t('onlyGlbFiles')}</p>
                     </div>
 
                     <div>

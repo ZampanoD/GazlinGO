@@ -83,13 +83,13 @@ type TranslationKey = keyof Omit<Translations, 'sort'> | `sort.${keyof SortTrans
 
 export type Languages = 'ru' | 'en' | 'es' | 'de' | 'fr';
 
-// Добавляем определение translations
+
 const translations: Record<Languages, Translations> = {
     ru: {
         search: "Поиск минералов...",
         addMineral: "Добавить минерал",
         description: "ОПИСАНИЕ",
-        selectMineral: "Выберите минерал для отображения деталей",
+        selectMineral: "🌍GazlinGO - это веб-приложение для интерактивного просмотра и управления коллекцией 3D-моделей минералов. Система предоставляет удобный интерфейс для работы с трехмерными моделями, их описаниями и классификацией. Разработана с использованием современного стека технологий. Выберите минерал из списка слева для дальнейшей работы ",
         error: "Ошибка",
         success: "Успешно",
         delete: "Удалить",
@@ -162,7 +162,7 @@ const translations: Record<Languages, Translations> = {
         search: "Search minerals...",
         addMineral: "Add mineral",
         description: "DESCRIPTION",
-        selectMineral: "Select a mineral to display details",
+        selectMineral: "🌍GazlinGO is a web application for interactive viewing and management of a collection of 3D models of minerals. The system provides a user-friendly interface for working with three-dimensional models, their descriptions and classification. Developed using a modern technology stack. Select a mineral from the list on the left for further work",
         error: "Error",
         success: "Success",
         delete: "Delete",
@@ -235,7 +235,7 @@ const translations: Record<Languages, Translations> = {
         search: "Rechercher des minéraux...",
         addMineral: "Ajouter un minéral",
         description: "DESCRIPTION",
-        selectMineral: "Sélectionnez un minéral pour afficher les détails",
+        selectMineral: "🌍GazlinGO est une application Web permettant de visualiser et de gérer de manière interactive une collection de modèles minéraux 3D. Le système fournit une interface conviviale pour travailler avec des modèles 3D, leurs descriptions et leur classification. Développé en utilisant une pile de technologie moderne. Sélectionnez un minéral dans la liste de gauche pour plus de travail",
         error: "Erreur",
         success: "Succès",
         delete: "Supprimer",
@@ -307,7 +307,7 @@ const translations: Record<Languages, Translations> = {
         search: "Mineralien suchen...",
         addMineral: "Mineral hinzufügen",
         description: "BESCHREIBUNG",
-        selectMineral: "Wählen Sie ein Mineral aus, um Details anzuzeigen",
+        selectMineral: "🌍GazlinGO ist eine webbasierte Anwendung zum interaktiven Anzeigen und Verwalten einer Sammlung von 3D-Mineralmodellen. Das System bietet eine benutzerfreundliche Schnittstelle für die Arbeit mit 3D-Modellen, deren Beschreibungen und Klassifikationen. Entwickelt mit einem modernen Technologiestapel. Wählen Sie ein Mineral aus der Liste auf der linken Seite aus, um es weiter zu bearbeiten",
         error: "Fehler",
         success: "Erfolgreich",
         delete: "Löschen",
@@ -381,7 +381,7 @@ const translations: Record<Languages, Translations> = {
         search: "Buscar minerales...",
         addMineral: "Añadir mineral",
         description: "DESCRIPCIÓN",
-        selectMineral: "Seleccione un mineral para ver los detalles",
+        selectMineral: "🌍GazlinGO es una aplicación web para ver y administrar de forma interactiva una colección de modelos 3D de minerales. El sistema proporciona una interfaz fácil de usar para trabajar con modelos tridimensionales, sus descripciones y clasificaciones. Desarrollado con una pila de tecnología moderna. Seleccione un mineral de la lista de la izquierda para seguir trabajando",
         error: "Error",
         success: "Éxito",
         delete: "Eliminar",

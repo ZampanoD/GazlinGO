@@ -7,6 +7,7 @@
 
 import { useAuth } from '../hooks/useAuth'
 import React from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Mineral {
     id: number;
@@ -31,6 +32,7 @@ export const MineralsList: React.FC<MineralsListProps> = ({
                                                               isLoading = false
                                                           }) => {
     const { isAdmin } = useAuth();
+    const { t } = useLanguage();
     const baseUrl = 'http://localhost:8080';
 
     if (isLoading) {
@@ -75,9 +77,9 @@ export const MineralsList: React.FC<MineralsListProps> = ({
                                 onDeleteClick(mineral);
                             }}
                             className="opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded transition-colors"
-                            title="Удалить минерал"
+                            title={t('delete')}
                         >
-                            Удалить
+                            {t('delete')}
                         </button>
                     )}
                 </div>
