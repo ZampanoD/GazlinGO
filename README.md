@@ -52,7 +52,6 @@ project/
 ├── db/                # Файлы базы данных
 │   ├── init.sql      # Инициализация БД
 │   └── Dockerfile   
-├── translate/         # Сервис переводов
 └── docker-compose.yml
 ```
 
