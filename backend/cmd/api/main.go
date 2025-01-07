@@ -11,7 +11,7 @@ import (
 	"backend/internal/api/middleware"
 	"backend/internal/database"
 	"backend/internal/service/file"
-	"backend/internal/service/translation" // Добавляем импорт
+	"backend/internal/service/translation"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -31,24 +31,20 @@ func main() {
 		log.Fatal("JWT_SECRET environment variable is required")
 	}
 
-	// Инициализация базы данных
 	db, err := database.NewDatabase()
 	if err != nil {
 		log.Fatal("Ошибка подключения к БД: ", err)
 	}
 	defer db.DB.Close()
 
-	// Настройка путей хранения
 	storagePath := "/app/storage"
 	log.Printf("Storage директория: %s", storagePath)
 
-	// Инициализация сервисов
 	fileService, err := file.NewFileService("/app")
 	if err != nil {
 		log.Fatal("Ошибка инициализации файлового сервиса: ", err)
 	}
 
-	// Инициализация сервиса переводов
 	baseURL := "http://translate:3000"
 	if os.Getenv("DOCKER_ENV") != "true" {
 		baseURL = "http://localhost:5050"
@@ -58,7 +54,6 @@ func main() {
 		log.Fatal("Ошибка инициализации сервиса переводов")
 	}
 
-	// Добавим проверку доступности сервиса переводов
 	if err := translationService.CheckAvailability(); err != nil {
 		log.Printf("Warning: Translation service is not available: %v", err)
 	} else {
@@ -102,7 +97,6 @@ func main() {
 		return c.SendFile(fullPath)
 	})
 
-	// Инициализация обработчика с сервисом переводов
 	h := handler_fiber.New(db, fileService, translationService)
 
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -115,21 +109,17 @@ func main() {
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
 
-	// Публичные маршруты
-	v1.Get("/minerals", h.GetAllMinerals) // Будет использовать язык по умолчанию
+	v1.Get("/minerals", h.GetAllMinerals)
 	v1.Get("/minerals/:id", h.GetMineralByID)
-	v1.Get("/languages", h.GetAvailableLanguages)              // Новый маршрут для получения списка языков
-	v1.Get("/minerals-translated", h.GetAllTranslatedMinerals) // Новый маршрут с поддержкой переводов
-	v1.Get("/minerals-translated/:id", h.GetTranslatedMineral) // Новый маршрут с поддержкой переводов
-	
-	// Аутентификация
+	v1.Get("/languages", h.GetAvailableLanguages)
+	v1.Get("/minerals-translated", h.GetAllTranslatedMinerals)
+	v1.Get("/minerals-translated/:id", h.GetTranslatedMineral)
+
 	v1.Post("/login", h.Login)
 	v1.Post("/register", h.Register)
 
-	// Защищенные маршруты
 	v1.Get("/find-minerals", middleware.AuthMiddleware(), h.SearchMineral)
 
-	// Маршруты администратора
 	admin := v1.Group("/admin", middleware.AuthMiddleware(), middleware.AdminOnly())
 	admin.Post("/minerals", h.CreateMineral)
 	admin.Put("/minerals/:id", h.UpdateMineral)
@@ -137,7 +127,6 @@ func main() {
 	admin.Post("/upload/model", h.UploadModel)
 	admin.Post("/upload/preview", h.UploadPreview)
 
-	// Маршруты для авторизованных пользователей
 	protected := v1.Group("", middleware.AuthMiddleware())
 	protected.Post("/favorites/:id", h.AddToFavorites)
 	protected.Delete("/favorites/:id", h.RemoveFromFavorites)

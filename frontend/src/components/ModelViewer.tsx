@@ -189,7 +189,14 @@ const RotatingLights = () => {
 };
 
 const Lights = ({ enhanced }: { enhanced: boolean }) => {
-    if (!enhanced) return <ambientLight intensity={1} />;
+    if (!enhanced) return (
+        <>
+            <ambientLight intensity={2.5}/>
+            <directionalLight position={[5, 5, 5]} intensity={3}/>
+            <directionalLight position={[-5, 5, -5]} intensity={2.5}/>
+            <directionalLight position={[0, 2, 8]} intensity={2}/>
+        </>
+    );
 
     return (
         <>

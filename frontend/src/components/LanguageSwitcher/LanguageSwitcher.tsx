@@ -3,8 +3,7 @@
 
 import { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
-import type { Languages } from '../../contexts/LanguageContext'; // Добавляем импорт типа
-
+import type { Languages } from '../../contexts/LanguageContext';
 interface Language {
     code: Languages;
     name: string;
@@ -24,7 +23,7 @@ export const LanguageSwitcher = () => {
     const { currentLanguage, setLanguage } = useLanguage();
 
 
-    const handleLanguageChange = async (langCode: Languages) => { // Обновляем тип параметра
+    const handleLanguageChange = async (langCode: Languages) => {
         setIsLoading(true);
         try {
             await setLanguage(langCode);
@@ -42,7 +41,7 @@ export const LanguageSwitcher = () => {
         <div className="relative inline-block">
             <select
                 value={currentLanguage}
-                onChange={(e) => handleLanguageChange(e.target.value as Languages)} // Добавляем приведение типов
+                onChange={(e) => handleLanguageChange(e.target.value as Languages)}
                 disabled={isLoading}
                 className={`
                     appearance-none bg-white

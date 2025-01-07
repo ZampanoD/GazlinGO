@@ -72,7 +72,9 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
             setDescription('')
             setModel(null)
             setPreview(null)
+            onClose()
             onSuccess()
+
         } catch (error) {
             if (error instanceof AxiosError && error.response?.data.error) {
                 showNotification(`${t('error')}: ${error.response.data.error}`, 'error')

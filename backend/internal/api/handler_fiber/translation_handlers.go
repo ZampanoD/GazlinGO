@@ -1,4 +1,7 @@
-// internal/api/handler_fiber/translation_handlers.go
+//Обработчики HTTP-запросов для работы с переводами минералов. Реализует получение,
+//поиск и отображение минералов на разных языках с поддержкой перевода между любыми
+//поддерживаемыми языками. Включает комплексную обработку ошибок и логирование всех
+//операций перевода.
 
 package handler_fiber
 
@@ -11,7 +14,6 @@ import (
 	"log"
 )
 
-// Получение списка доступных языков
 func (h *Handler) GetAvailableLanguages(c *fiber.Ctx) error {
 	languages := h.translationService.GetSupportedLanguages()
 	if len(languages) == 0 {
@@ -23,7 +25,6 @@ func (h *Handler) GetAvailableLanguages(c *fiber.Ctx) error {
 	})
 }
 
-// Получение минерала на определенном языке
 func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {
@@ -31,8 +32,14 @@ func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 	}
 
 	targetLang := c.Query("lang")
+	sourceLang := c.Query("source_lang")
+
 	if targetLang == "" {
-		targetLang = "ru" // Язык по умолчанию
+		targetLang = "ru"
+	}
+
+	if sourceLang == "" {
+		sourceLang = "ru"
 	}
 
 	if !h.translationService.IsLanguageSupported(targetLang) {
@@ -44,16 +51,7 @@ func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 		return errors.SendError(c, errors.ErrNotFound("минерал не найден"))
 	}
 
-	// Если запрошенный язык совпадает с исходным, возвращаем без перевода
-	if targetLang == "ru" {
-		return c.JSON(fiber.Map{
-			"status": "success",
-			"data":   mineral,
-		})
-	}
-
-	// Переводим название
-	translatedTitle, err := h.translationService.Translate(mineral.Title, "ru", targetLang)
+	translatedTitle, err := h.translationService.Translate(mineral.Title, sourceLang, targetLang)
 	if err != nil {
 		switch {
 		case stderrors.Is(err, translation.ErrServiceUnavailable):
@@ -74,7 +72,7 @@ func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 			log.Printf("Пустой текст для перевода: %v", err)
 			return c.JSON(fiber.Map{
 				"status": "success",
-				"data":   mineral, // Возвращаем оригинал, если текст пустой
+				"data":   mineral,
 			})
 		default:
 			log.Printf("Неизвестная ошибка при переводе: %v", err)
@@ -82,8 +80,7 @@ func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 		}
 	}
 
-	// Переводим описание
-	translatedDescription, err := h.translationService.Translate(mineral.Description, "ru", targetLang)
+	translatedDescription, err := h.translationService.Translate(mineral.Description, sourceLang, targetLang)
 	if err != nil {
 		switch {
 		case stderrors.Is(err, translation.ErrServiceUnavailable):
@@ -101,20 +98,19 @@ func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 				err.Error(),
 			))
 		case stderrors.Is(err, translation.ErrEmptyText):
-			translatedDescription = "" // Если текст пустой, оставляем пустым
+			translatedDescription = ""
 		default:
 			log.Printf("Неизвестная ошибка при переводе: %v", err)
 			return errors.SendError(c, errors.ErrServerError)
 		}
 	}
 
-	// Создаем копию минерала с переведенными полями
 	translatedMineral := models.Mineral{
 		ID:               mineral.ID,
 		Title:            translatedTitle,
 		Description:      translatedDescription,
-		ModelPath:        mineral.ModelPath,        // Оставляем оригинальный путь
-		PreviewImagePath: mineral.PreviewImagePath, // Оставляем оригинальный путь
+		ModelPath:        mineral.ModelPath,
+		PreviewImagePath: mineral.PreviewImagePath,
 		CreatedAt:        mineral.CreatedAt,
 	}
 
@@ -124,11 +120,16 @@ func (h *Handler) GetTranslatedMineral(c *fiber.Ctx) error {
 	})
 }
 
-// Получение всех минералов на определенном языке
 func (h *Handler) GetAllTranslatedMinerals(c *fiber.Ctx) error {
 	targetLang := c.Query("lang")
+	sourceLang := c.Query("source_lang")
+
 	if targetLang == "" {
-		targetLang = "ru" // Язык по умолчанию
+		targetLang = "ru"
+	}
+
+	if sourceLang == "" {
+		sourceLang = "ru"
 	}
 
 	if !h.translationService.IsLanguageSupported(targetLang) {
@@ -141,20 +142,10 @@ func (h *Handler) GetAllTranslatedMinerals(c *fiber.Ctx) error {
 		return errors.SendError(c, errors.ErrServerError)
 	}
 
-	// Если запрошен русский язык, возвращаем без перевода
-	if targetLang == "ru" {
-		return c.JSON(fiber.Map{
-			"status": "success",
-			"data":   minerals,
-		})
-	}
-
-	// Переводим все минералы
 	translatedMinerals := make([]models.Mineral, len(minerals))
 	translateErrors := 0
 	for i, mineral := range minerals {
-		// Переводим название
-		translatedTitle, err := h.translationService.Translate(mineral.Title, "ru", targetLang)
+		translatedTitle, err := h.translationService.Translate(mineral.Title, sourceLang, targetLang)
 		if err != nil {
 			log.Printf("Ошибка при переводе заголовка для минерала %d: %v", mineral.ID, err)
 			if stderrors.Is(err, translation.ErrServiceUnavailable) {
@@ -165,11 +156,10 @@ func (h *Handler) GetAllTranslatedMinerals(c *fiber.Ctx) error {
 				))
 			}
 			translateErrors++
-			translatedTitle = mineral.Title // Используем оригинальное название при ошибке
+			translatedTitle = mineral.Title
 		}
 
-		// Переводим описание
-		translatedDescription, err := h.translationService.Translate(mineral.Description, "ru", targetLang)
+		translatedDescription, err := h.translationService.Translate(mineral.Description, sourceLang, targetLang)
 		if err != nil {
 			log.Printf("Ошибка при переводе описания для минерала %d: %v", mineral.ID, err)
 			if stderrors.Is(err, translation.ErrServiceUnavailable) {
@@ -180,7 +170,7 @@ func (h *Handler) GetAllTranslatedMinerals(c *fiber.Ctx) error {
 				))
 			}
 			translateErrors++
-			translatedDescription = mineral.Description // Используем оригинальное описание при ошибке
+			translatedDescription = mineral.Description
 		}
 
 		translatedMinerals[i] = models.Mineral{
@@ -203,13 +193,21 @@ func (h *Handler) GetAllTranslatedMinerals(c *fiber.Ctx) error {
 	})
 }
 
-// Поиск минералов с учетом языка
 func (h *Handler) SearchTranslatedMinerals(c *fiber.Ctx) error {
 	query := c.Query("query")
-	targetLang := c.Query("lang", "ru")
+	targetLang := c.Query("lang")
+	sourceLang := c.Query("source_lang")
 
 	if query == "" {
 		return errors.SendError(c, errors.ErrInvalidInput("поисковый запрос не может быть пустым"))
+	}
+
+	if targetLang == "" {
+		targetLang = "ru"
+	}
+
+	if sourceLang == "" {
+		sourceLang = "ru"
 	}
 
 	if !h.translationService.IsLanguageSupported(targetLang) {
@@ -222,16 +220,9 @@ func (h *Handler) SearchTranslatedMinerals(c *fiber.Ctx) error {
 		return errors.SendError(c, errors.ErrServerError)
 	}
 
-	if targetLang == "ru" {
-		return c.JSON(fiber.Map{
-			"status": "success",
-			"data":   minerals,
-		})
-	}
-
 	translatedMinerals := make([]models.Mineral, 0, len(minerals))
 	for _, mineral := range minerals {
-		translatedTitle, err := h.translationService.Translate(mineral.Title, "ru", targetLang)
+		translatedTitle, err := h.translationService.Translate(mineral.Title, sourceLang, targetLang)
 		if err != nil {
 			if stderrors.Is(err, translation.ErrServiceUnavailable) {
 				return errors.SendError(c, errors.NewAPIError(
@@ -244,7 +235,7 @@ func (h *Handler) SearchTranslatedMinerals(c *fiber.Ctx) error {
 			continue
 		}
 
-		translatedDescription, err := h.translationService.Translate(mineral.Description, "ru", targetLang)
+		translatedDescription, err := h.translationService.Translate(mineral.Description, sourceLang, targetLang)
 		if err != nil {
 			if stderrors.Is(err, translation.ErrServiceUnavailable) {
 				return errors.SendError(c, errors.NewAPIError(

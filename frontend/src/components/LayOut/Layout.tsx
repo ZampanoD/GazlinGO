@@ -71,8 +71,9 @@ const Layout = () => {
     const fetchMinerals = useCallback(async () => {
         try {
             setIsLoading(true);
-
-            const response = await api.get(`/minerals-translated?lang=${currentLanguage}`);
+            const response = await api.get(
+                `/minerals-translated?lang=${currentLanguage}&source_lang=ru`
+            );
             const minerals = response.data.data.map((mineral: Mineral) => ({
                 ...mineral,
                 isFavorite: favorites.includes(mineral.id)
@@ -80,6 +81,7 @@ const Layout = () => {
             setMinerals(minerals);
         } catch (error) {
             console.error('Ошибка загрузки минералов:', error);
+
         } finally {
             setIsLoading(false);
         }

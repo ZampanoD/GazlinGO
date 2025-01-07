@@ -1,4 +1,7 @@
-// internal/service/translation/translation.go
+//Сервис перевода, обеспечивающий поддержку мультиязычности в приложении.
+//Реализует кэширование переводов для оптимизации производительности, обработку ошибок
+//и проверку доступности сервиса перевода. Поддерживает перевод между всеми основными
+//языками системы (русский, английский, французский, немецкий, испанский).
 
 package translation
 
@@ -28,8 +31,8 @@ type TranslationService struct {
 	supportedLanguages map[string]bool
 	client             *http.Client
 	mu                 sync.RWMutex
-	cache              map[string]string // Кэш переводов
-	cacheMu            sync.RWMutex      // Мьютекс для кэша
+	cache              map[string]string
+	cacheMu            sync.RWMutex
 }
 type translateResponse struct {
 	Info struct {
@@ -100,7 +103,7 @@ func (s *TranslationService) GetSupportedLanguages() []Language {
 }
 
 func (s *TranslationService) Translate(text, sourceLang, targetLang string) (string, error) {
-	// Логируем входные данные
+
 	cacheKey := s.getCacheKey(text, sourceLang, targetLang)
 	s.cacheMu.RLock()
 	if cached, ok := s.cache[cacheKey]; ok {
@@ -123,7 +126,6 @@ func (s *TranslationService) Translate(text, sourceLang, targetLang string) (str
 	encodedText := strings.ReplaceAll(url.QueryEscape(text), "+", "%20")
 	apiURL := fmt.Sprintf("%s/api/v1/%s/%s/%s", s.baseURL, sourceLang, targetLang, encodedText)
 
-	// Логируем URL запроса
 	log.Printf("Making translation request to URL: %s", apiURL)
 
 	req, err := http.NewRequest("GET", apiURL, nil)
@@ -132,7 +134,7 @@ func (s *TranslationService) Translate(text, sourceLang, targetLang string) (str
 		return "", fmt.Errorf("error creating request: %w", err)
 	}
 	log.Printf("Full request details: URL=%s, Headers=%v", apiURL, req.Header)
-	// Добавляем заголовки и логируем их
+
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 	log.Printf("Request headers: %v", req.Header)
@@ -144,7 +146,6 @@ func (s *TranslationService) Translate(text, sourceLang, targetLang string) (str
 	}
 	defer resp.Body.Close()
 
-	// Логируем статус ответа
 	log.Printf("Response status code: %d", resp.StatusCode)
 
 	body, err := io.ReadAll(resp.Body)
@@ -153,7 +154,6 @@ func (s *TranslationService) Translate(text, sourceLang, targetLang string) (str
 		return "", fmt.Errorf("error reading response body: %w", err)
 	}
 
-	// Логируем тело ответа
 	log.Printf("Response body: %s", string(body))
 
 	if resp.StatusCode != http.StatusOK {
@@ -172,7 +172,6 @@ func (s *TranslationService) Translate(text, sourceLang, targetLang string) (str
 		return "", ErrTranslationFailed
 	}
 
-	// Логируем успешный результат
 	log.Printf("Successfully translated text to: %s", result.Translation)
 	s.cacheMu.Lock()
 	s.cache[cacheKey] = result.Translation
