@@ -291,24 +291,47 @@ func (h *Handler) DeleteMineral(c *fiber.Ctx) error {
 
 func (h *Handler) SearchMineral(c *fiber.Ctx) error {
 	query := c.Query("query")
+	targetLang := c.Query("lang")
 
 	if query == "" {
-		return errors.SendError(c, errors.ErrInvalidInput("поисковый запрос не может быть пустым"))
+		return c.JSON(fiber.Map{
+			"status": "success",
+			"data":   []models.Mineral{},
+		})
 	}
 
-	minerals, err := h.db.SearchMineralByTitle(query)
+	minerals, err := h.db.GetAllMinerals()
 	if err != nil {
-		log.Printf("Ошибка при поиске минерала: %v", err)
+		log.Printf("Ошибка при получении минералов: %v", err)
 		return errors.SendError(c, errors.ErrServerError)
 	}
 
-	if minerals == nil {
-		minerals = []models.Mineral{}
+	var searchResults []models.Mineral
+	for _, mineral := range minerals {
+		translatedTitle, err := h.translationService.Translate(mineral.Title, "ru", targetLang)
+		if err == nil {
+
+			if strings.HasPrefix(
+				strings.ToLower(translatedTitle),
+				strings.ToLower(query),
+			) {
+
+				translatedMineral := mineral
+				translatedMineral.Title = translatedTitle
+
+				translatedDesc, err := h.translationService.Translate(mineral.Description, "ru", targetLang)
+				if err == nil {
+					translatedMineral.Description = translatedDesc
+				}
+
+				searchResults = append(searchResults, translatedMineral)
+			}
+		}
 	}
 
 	return c.JSON(fiber.Map{
 		"status": "success",
-		"data":   minerals,
+		"data":   searchResults,
 	})
 }
 func (h *Handler) AddToFavorites(c *fiber.Ctx) error {

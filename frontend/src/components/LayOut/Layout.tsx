@@ -171,13 +171,18 @@ const Layout = () => {
                 return
             }
 
-            const response = await api.get(`/find-minerals?query=${encodeURIComponent(trimmedQuery)}`)
-            setMinerals(response.data.data)
+            const response = await api.get(
+                `/find-minerals?query=${encodeURIComponent(trimmedQuery)}&lang=${currentLanguage}&source_lang=ru`
+            )
+
+            const minerals = Array.isArray(response.data.data) ? response.data.data : [];
+            setMinerals(minerals);
         } catch (error) {
             console.error('Ошибка поиска:', error)
-            await fetchMinerals()
+            
+            setMinerals([]);
         }
-    }, [fetchMinerals])
+    }, [currentLanguage])
 
     const debouncedSearch = useCallback(
         debounce(handleSearch, 500),

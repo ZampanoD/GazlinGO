@@ -157,10 +157,12 @@ func (db *Database) SearchMineralByTitle(query string) ([]models.Mineral, error)
 	sqlQuery := `
         SELECT id, title, description, model_path, preview_image_path, created_at
         FROM minerals
-        WHERE title ILIKE $1
+        WHERE LOWER(title) LIKE LOWER($1)
         ORDER BY title ASC
     `
+
 	searchPattern := query + "%"
+
 	rows, err := db.DB.Query(sqlQuery, searchPattern)
 	if err != nil {
 		return nil, err
@@ -184,8 +186,5 @@ func (db *Database) SearchMineralByTitle(query string) ([]models.Mineral, error)
 		minerals = append(minerals, m)
 	}
 
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
 	return minerals, nil
 }
