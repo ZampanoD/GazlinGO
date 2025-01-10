@@ -191,15 +191,16 @@ const RotatingLights = () => {
 const Lights = ({ enhanced }: { enhanced: boolean }) => {
     if (!enhanced) return (
         <>
-            <ambientLight intensity={2.5}/>
-            <directionalLight position={[5, 5, 5]} intensity={3}/>
-            <directionalLight position={[-5, 5, -5]} intensity={2.5}/>
-            <directionalLight position={[0, 2, 8]} intensity={2}/>
+            <ambientLight intensity={1}/>
+            <directionalLight position={[5, 5, 5]} intensity={1.2}/>
+            <directionalLight position={[-5, 5, -5]} intensity={1.2}/>
+            <directionalLight position={[0, 2, 8]} intensity={1}/>
         </>
     );
 
     return (
         <>
+            <ambientLight intensity={2}/>
             <spotLight
                 position={[0, 8, 0]}
                 intensity={4}
@@ -207,7 +208,7 @@ const Lights = ({ enhanced }: { enhanced: boolean }) => {
                 penumbra={0.5}
                 castShadow
             />
-            <RotatingLights />
+            <RotatingLights/>
         </>
     );
 };

@@ -13,6 +13,7 @@ import { DeleteConfirmation } from '../DeleteConfirmation/DeleteConfirmation'
 import { useIsMobile }  from '../../hooks/useIsMobile';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
+import { EditMineralForm } from '../../components/EditMineralForm';
 
 interface Mineral {
     id: number;
@@ -48,9 +49,20 @@ const Layout = () => {
     const [favorites, setFavorites] = useState<number[]>([])
     const { showNotification } = useNotification()
     const isMobile = useIsMobile();
-    const [isMenuOpen, setIsMenuOpen] = useState(!isMobile);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { currentLanguage } = useLanguage();
     const { t } = useLanguage();
+    const [mineralToEdit, setMineralToEdit] = useState<Mineral | null>(null);
+
+    const handleEditClick = (mineral: Mineral) => {
+        setMineralToEdit(mineral);
+    };
+
+    const handleEditSuccess = async () => {
+        await fetchMinerals();
+        setMineralToEdit(null);
+        window.location.reload();
+    };
 
 
     const handleResize = useCallback((newWidth: number) => {
@@ -241,7 +253,7 @@ const Layout = () => {
                             onClick={() => setShowMineralForm(true)}
                             className="w-full flex justify-center bg-gradient-to-r from-blue-500 via-purple-600 to-indigo-500 bg-auto-200 animate-gradient hover:from-blue-700 hover:via-purple-800 hover:to-indigo-700 text-white py-2 px-4 rounded-lg shadow transition-all duration-300"
                         >
-                            {t('addMineral')} {/* Меняем текст кнопки */}
+                            {t('addMineral')}
                         </button>
                     </div>
                 )}
@@ -270,6 +282,7 @@ const Layout = () => {
                             if (isMobile) setIsMenuOpen(false);
                         }}
                         onDeleteClick={handleDeleteClick}
+                        onEditClick={handleEditClick}
                         isLoading={isLoading}
                     />
                 </nav>
@@ -343,6 +356,14 @@ const Layout = () => {
                     mineralName={mineralToDelete.title}
                     onConfirm={handleDeleteConfirm}
                     onCancel={handleDeleteCancel}
+                />
+            )}
+
+            {mineralToEdit && (
+                <EditMineralForm
+                    mineral={mineralToEdit}
+                    onClose={() => setMineralToEdit(null)}
+                    onSuccess={handleEditSuccess}
                 />
             )}
 

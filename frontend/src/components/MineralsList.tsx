@@ -8,6 +8,7 @@
 import { useAuth } from '../hooks/useAuth'
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Trash2, Edit2 } from 'lucide-react';
 
 interface Mineral {
     id: number;
@@ -23,13 +24,16 @@ interface MineralsListProps {
     onSelectMineral: (mineral: Mineral) => void;
     onDeleteClick: (mineral: Mineral) => void;
     isLoading?: boolean;
+    onEditClick: (mineral: Mineral) => void;
 }
 
 export const MineralsList: React.FC<MineralsListProps> = ({
                                                               minerals,
                                                               onSelectMineral,
                                                               onDeleteClick,
+                                                              onEditClick,
                                                               isLoading = false
+
                                                           }) => {
     const { isAdmin } = useAuth();
     const { t } = useLanguage();
@@ -71,16 +75,28 @@ export const MineralsList: React.FC<MineralsListProps> = ({
                     </div>
                     <h3 className="font-bold flex-1 truncate min-w-0">{mineral.title}</h3>
                     {isAdmin && (
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onDeleteClick(mineral);
-                            }}
-                            className="opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded transition-colors"
-                            title={t('delete')}
-                        >
-                            {t('delete')}
-                        </button>
+                        <div className="opacity-0 group-hover:opacity-100 flex gap-2">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onEditClick(mineral);
+                                }}
+                                className="bg-white hover:bg-gray-100 text-gray-700 p-2 rounded transition-colors border border-gray-300"
+                                title={t('edit')}
+                            >
+                                <Edit2 size={18} />
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onDeleteClick(mineral);
+                                }}
+                                className="bg-red-500 hover:bg-red-600 text-white p-2 rounded transition-colors"
+                                title={t('delete')}
+                            >
+                                <Trash2 size={18} />
+                            </button>
+                        </div>
                     )}
                 </div>
             ))}

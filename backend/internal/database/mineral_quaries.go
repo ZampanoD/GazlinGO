@@ -7,6 +7,8 @@ package database
 import (
 	"backend/internal/models"
 	"database/sql"
+	"errors"
+	"log"
 )
 
 func (db *Database) GetAllMinerals() ([]models.Mineral, error) {
@@ -106,6 +108,7 @@ func (db *Database) UpdateMineral(mineral models.Mineral) (*models.Mineral, erro
         WHERE id = $5
         RETURNING id, title, description, model_path, preview_image_path, created_at
     `
+	log.Printf("Received update request for mineral %d with title: %s, description: %s", mineral.ID, mineral.Title, mineral.Description)
 	var updated models.Mineral
 	err := db.DB.QueryRow(
 		query,
@@ -124,12 +127,13 @@ func (db *Database) UpdateMineral(mineral models.Mineral) (*models.Mineral, erro
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, ErrMineralNotFound
+		return nil, errors.New("минерал не найден")
 	}
 	if err != nil {
 		return nil, err
 	}
 	return &updated, nil
+
 }
 
 func (db *Database) DeleteMineral(id int) error {

@@ -199,32 +199,57 @@ func (h *Handler) UpdateMineral(c *fiber.Ctx) error {
 		return errors.SendError(c, errors.ErrInvalidInput("некорректный id"))
 	}
 
-	var mineral models.Mineral
-	if err := c.BodyParser(&mineral); err != nil {
-		return errors.SendError(c, errors.ErrInvalidInput("некорректные данные минерала"))
+	currentMineral, err := h.db.GetMineralByID(id)
+	if err != nil {
+		return errors.SendError(c, errors.ErrNotFound("минерал не найден"))
 	}
 
-	mineral.ID = id
+	title := c.FormValue("title")
+	description := c.FormValue("description")
 
-	if err := mineral.Validate(); err != nil {
+	log.Printf("Получены данные для обновления минерала %d: title=%s, description=%s",
+		id, title, description)
+
+	if title != "" {
+		currentMineral.Title = title
+	}
+	if description != "" {
+		currentMineral.Description = description
+	}
+
+	if modelFile, err := c.FormFile("model"); err == nil {
+		modelPath, err := h.fileService.SaveModel(modelFile)
+		if err != nil {
+			return errors.SendError(c, err.(*errors.APIError))
+		}
+		currentMineral.ModelPath = modelPath
+	}
+
+	if previewFile, err := c.FormFile("preview"); err == nil {
+		previewPath, err := h.fileService.SavePreview(previewFile)
+		if err != nil {
+			return errors.SendError(c, err.(*errors.APIError))
+		}
+		currentMineral.PreviewImagePath = previewPath
+	}
+
+	if err := currentMineral.Validate(); err != nil {
 		return errors.SendError(c, errors.ErrInvalidInput(err.Error()))
 	}
 
-	updatedMineral, err := h.db.UpdateMineral(mineral)
+	updatedMineral, err := h.db.UpdateMineral(*currentMineral)
 	if err != nil {
-		if err == database.ErrMineralNotFound {
-			return errors.SendError(c, errors.ErrNotFound("минерал не найден"))
-		}
-		log.Printf("Ошибка при обновлении минерала: %v", err)
+		log.Printf("Ошибка при обновлении минерала в БД: %v", err)
 		return errors.SendError(c, errors.ErrServerError)
 	}
 
+	log.Printf("Минерал %d успешно обновлен", id)
 	return c.JSON(fiber.Map{
 		"status": "success",
 		"data":   updatedMineral,
 	})
-}
 
+}
 func (h *Handler) DeleteMineral(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id")
 	if err != nil {

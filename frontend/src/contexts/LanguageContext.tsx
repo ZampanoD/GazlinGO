@@ -77,6 +77,8 @@ interface Translations {
     recommendedSize: string;
     onlyGlbFiles: string;
     requiredField: string;
+    model:string;
+    preview: string;
 }
 
 type TranslationKey = keyof Omit<Translations, 'sort'> | `sort.${keyof SortTranslations}`;
@@ -144,9 +146,12 @@ const translations: Record<Languages, Translations> = {
         username: 'Имя пользователя',
         modelLabel: 'Модель',
         previewLabel: 'Предпросмотр',
-        recommendedSize: 'Рекомендуемый размер 200x00',
+        recommendedSize: 'Рекомендуемый размер 200x200',
         onlyGlbFiles: 'Допустимы только файлы .glb',
         requiredField: '*',
+        model: "Выберите 3D Модель (опционально)",
+        preview: "Загрузить Превью (опционально)",
+
 
 
         sort: {
@@ -220,6 +225,8 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Recommended size 200x200',
         onlyGlbFiles: 'Only .glb files are allowed',
         requiredField: '*',
+        model: "Select 3D Model (optional)",
+        preview: "Upload Preview (optional)",
 
 
 
@@ -293,6 +300,8 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Taille recommandée 200х200',
         onlyGlbFiles: 'Seuls les fichiers .glb sont acceptés',
         requiredField: '*',
+        model: "Sélectionner le Modèle 3D (facultatif)",
+        preview: "Télécharger l'Aperçu (facultatif)",
 
 
         sort: {
@@ -365,6 +374,8 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Empfohlene Größe 200x200',
         onlyGlbFiles: 'Nur .glb-Dateien sind erlaubt',
         requiredField: '*',
+        model: "3D Modell auswählen (optional)",
+        preview: "Vorschau hochladen (optional)",
 
 
 
@@ -439,6 +450,8 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Tamaño recomendado 200x200',
         onlyGlbFiles: 'Solo se permiten archivos .glb',
         requiredField: '*',
+        model: "Seleccionar Modelo 3D (opcional)",
+        preview: "Subir Vista previa (opcional)",
 
 
         sort: {
@@ -484,6 +497,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
             setIsLoading(true);
             setError(null);
             setCurrentLanguage(lang);
+            window.location.reload();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error changing language');
         } finally {
