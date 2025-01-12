@@ -8,6 +8,8 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN npm install -D @tailwindcss/typography react-markdown
+
 
 COPY . .
 

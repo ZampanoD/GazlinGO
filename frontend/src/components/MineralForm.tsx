@@ -9,7 +9,8 @@ import { api, AxiosError } from '../services/api'
 import { useAuth } from '../hooks/useAuth'
 import { useNotification } from '../components/Notification/NotificationContext'
 import { useEscapeKey } from '../hooks/useEscapeKey'
-import { useLanguage } from '../contexts/LanguageContext';
+import MarkdownEditor from './Markdown/MarkdownEditor'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface MineralFormProps {
     onClose: () => void;
@@ -23,7 +24,7 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
     const [preview, setPreview] = useState<File | null>(null)
     const { showNotification } = useNotification()
     const { isAdmin } = useAuth()
-    const { t } = useLanguage();
+    const { t } = useLanguage()
 
     useEscapeKey(onClose);
 
@@ -68,13 +69,8 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
             })
 
             showNotification(t('mineralAddSuccess'), 'success')
-            setTitle('')
-            setDescription('')
-            setModel(null)
-            setPreview(null)
-            onClose()
             onSuccess()
-
+            onClose()
         } catch (error) {
             if (error instanceof AxiosError && error.response?.data.error) {
                 showNotification(`${t('error')}: ${error.response.data.error}`, 'error')
@@ -108,10 +104,15 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
         }
     }
 
+    const handleClose = (e: React.MouseEvent) => {
+        e.preventDefault()
+        onClose()
+    }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center" style={{ zIndex: 1000 }}>
             <div className="fixed inset-0 bg-black bg-opacity-50" style={{ zIndex: 1000 }}></div>
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto relative" style={{ zIndex: 1001 }}>
+            <div className="bg-white p-6 rounded-lg shadow-lg w-[800px] max-h-[90vh] overflow-y-auto relative" style={{ zIndex: 1001 }}>
                 <h2 className="text-xl font-bold mb-4">{t('addMineral')}</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -130,19 +131,17 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
 
                     <div>
                         <label className="block text-sm font-medium mb-1">
-                            Описание <span className="text-red-500">*</span>
+                            {t('description')} <span className="text-red-500">*</span>
                         </label>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="border p-2 rounded w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder={t('enterDescription')}
+                        <MarkdownEditor
+                            initialValue={description}
+                            onChange={setDescription}
                         />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium mb-1">
-                            {t('modelLabel')} <span className="text-red-500">{t('requiredField')}</span>
+                            {t('model')} <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="file"
@@ -150,12 +149,11 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             onChange={handleModelChange}
                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <p className="text-xs text-gray-500 mt-1">{t('onlyGlbFiles')}</p>
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium mb-1">
-                            {t('previewLabel')} <span className="text-red-500">{t('requiredField')}</span>
+                            {t('preview')} <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="file"
@@ -163,7 +161,6 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
                             onChange={handlePreviewChange}
                             className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <p className="text-xs text-gray-500 mt-1">{t('recommendedSize')}</p>
                     </div>
 
                     <div className="flex justify-between gap-2 mt-6">
@@ -176,8 +173,8 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
 
                         <button
                             type="button"
-                            onClick={onClose}
-                            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            onClick={handleClose}
+                            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
                         >
                             {t('close')}
                         </button>
@@ -187,3 +184,5 @@ export const MineralForm: React.FC<MineralFormProps> = ({ onClose, onSuccess }) 
         </div>
     )
 }
+
+export default MineralForm

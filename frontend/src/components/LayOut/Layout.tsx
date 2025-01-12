@@ -14,6 +14,8 @@ import { useIsMobile }  from '../../hooks/useIsMobile';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
 import { EditMineralForm } from '../../components/EditMineralForm';
+import MarkdownViewer from '../Markdown/MarkdownViewer';
+
 
 interface Mineral {
     id: number;
@@ -179,7 +181,7 @@ const Layout = () => {
             setMinerals(minerals);
         } catch (error) {
             console.error('Ошибка поиска:', error)
-            
+
             setMinerals([]);
         }
     }, [currentLanguage])
@@ -312,7 +314,7 @@ const Layout = () => {
 
                 <div className="px-8 py-4">
                     <div className="flex justify-center">
-                    <h1 className="text-2xl font-bold text-slate-900 mb-6">
+                        <h1 className="text-2xl font-bold text-slate-900 mb-6">
                             {selectedMineral ? selectedMineral.title : "GazlinGO"}
                         </h1>
                     </div>
@@ -342,10 +344,13 @@ const Layout = () => {
                     <div className="flex justify-center">
                         <h2 className="text-xl font-bold text-slate-900 mb-4">{t('description')}</h2>
                     </div>
-
-                    <p className="text-slate-700">
-                        {selectedMineral ? selectedMineral.description : t('selectMineral')}
-                    </p>
+                    <div className="text-slate-700">
+                        {selectedMineral ? (
+                            <MarkdownViewer content={selectedMineral.description} />
+                        ) : (
+                            <p>{t('selectMineral')}</p>
+                        )}
+                    </div>
                 </div>
             </main>
 

@@ -1,6 +1,3 @@
-//Контекст для управления многоязычностью приложения, предоставляющий функции перевода и смены языка всем компонентам.
-//Содержит словари переводов для всех поддерживаемых языков (русский, английский, французский, немецкий, испанский).
-//Реализует автоматическое сохранение выбранного языка и обновление интерфейса при его смене.
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
@@ -79,6 +76,13 @@ interface Translations {
     requiredField: string;
     model:string;
     preview: string;
+    boldText: string;
+    italicText: string;
+    insertLink: string;
+    heading2: string;
+    heading3: string;
+    bulletList: string;
+    numberedList: string;
 }
 
 type TranslationKey = keyof Omit<Translations, 'sort'> | `sort.${keyof SortTranslations}`;
@@ -149,8 +153,15 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Рекомендуемый размер 200x200',
         onlyGlbFiles: 'Допустимы только файлы .glb',
         requiredField: '*',
-        model: "Выберите 3D Модель (опционально)",
-        preview: "Загрузить Превью (опционально)",
+        model: "Выберите 3D Модель",
+        preview: "Загрузить Превью",
+        boldText: "Жирный текст",
+        italicText: "Курсив",
+        insertLink: "Вставить ссылку",
+        heading2: "Заголовок 2",
+        heading3: "Заголовок 3",
+        bulletList: "Маркированный список",
+        numberedList: "Нумерованный список",
 
 
 
@@ -225,8 +236,15 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Recommended size 200x200',
         onlyGlbFiles: 'Only .glb files are allowed',
         requiredField: '*',
-        model: "Select 3D Model (optional)",
-        preview: "Upload Preview (optional)",
+        model: "Select 3D Model",
+        preview: "Upload Preview",
+        boldText: "Bold text",
+        italicText: "Italic text",
+        insertLink: "Insert link",
+        heading2: "Heading 2",
+        heading3: "Heading 3",
+        bulletList: "Bullet list",
+        numberedList: "Numbered list",
 
 
 
@@ -300,8 +318,15 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Taille recommandée 200х200',
         onlyGlbFiles: 'Seuls les fichiers .glb sont acceptés',
         requiredField: '*',
-        model: "Sélectionner le Modèle 3D (facultatif)",
-        preview: "Télécharger l'Aperçu (facultatif)",
+        model: "Sélectionner le Modèle 3D",
+        preview: "Télécharger l'Aperçu",
+        boldText: "Texte en gras",
+        italicText: "Texte en italique",
+        insertLink: "Insérer un lien",
+        heading2: "Titre 2",
+        heading3: "Titre 3",
+        bulletList: "Liste à puces",
+        numberedList: "Liste numérotée",
 
 
         sort: {
@@ -374,8 +399,15 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Empfohlene Größe 200x200',
         onlyGlbFiles: 'Nur .glb-Dateien sind erlaubt',
         requiredField: '*',
-        model: "3D Modell auswählen (optional)",
-        preview: "Vorschau hochladen (optional)",
+        model: "3D Modell auswählen ",
+        preview: "Vorschau hochladen ",
+        boldText: "Fettschrift",
+        italicText: "Kursivschrift",
+        insertLink: "Link einfügen",
+        heading2: "Überschrift 2",
+        heading3: "Überschrift 3",
+        bulletList: "Aufzählungsliste",
+        numberedList: "Nummerierte Liste",
 
 
 
@@ -450,8 +482,15 @@ const translations: Record<Languages, Translations> = {
         recommendedSize: 'Tamaño recomendado 200x200',
         onlyGlbFiles: 'Solo se permiten archivos .glb',
         requiredField: '*',
-        model: "Seleccionar Modelo 3D (opcional)",
-        preview: "Subir Vista previa (opcional)",
+        model: "Seleccionar Modelo 3D ",
+        preview: "Subir Vista previa ",
+        boldText: "Texto en negrita",
+        italicText: "Texto en cursiva",
+        insertLink: "Insertar enlace",
+        heading2: "Título 2",
+        heading3: "Título 3",
+        bulletList: "Lista con viñetas",
+        numberedList: "Lista numerada",
 
 
         sort: {
