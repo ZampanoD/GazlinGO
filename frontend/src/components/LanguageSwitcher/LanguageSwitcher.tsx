@@ -1,5 +1,5 @@
-//Компонент для переключения языка интерфейса с визуальным отображением текущего выбора и флагов стран.
-//Использует контекст языка для управления переводами и сохраняет выбор пользователя в локальном хранилище.
+// A component for switching the interface language with visual display of the current selection and country flags.
+// Uses the language context to manage translations and saves the user's choice in local storage.
 
 import { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';

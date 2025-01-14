@@ -1,6 +1,6 @@
-//Тестовый компонент для проверки работоспособности API и основных функций аутентификации.
-//Реализует функционал для тестирования подключения к серверу, регистрации пользователей и авторизации с полной обработкой ошибок и выводом результатов.
-//Включает формы для ввода учетных данных и отображения ответов сервера в удобном формате. Используется во время разработки и отладки для проверки корректности работы backend-взаимодействия
+// A test component for checking the functionality of the API and core authentication features.
+// Implements functionality for testing server connectivity, user registration, and login with full error handling and result display.
+// Includes forms for entering credentials and displaying server responses in a user-friendly format. Used during development and debugging to verify the correctness of backend interactions.
 
 import { useState, useEffect } from 'react'
 import { api } from '../services/api'

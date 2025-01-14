@@ -1,8 +1,7 @@
-//Модуль определяет структуры данных для управления пользователями. Ключевой объект User содержит полную информацию
-//о пользователе: уникальный идентификатор, имя, роль (user/admin), время создания и список избранных элементов.
-//Реализована система ролей с четким разграничением прав, структуры для аутентификации (LoginRequest) и ответа после
-//входа (LoginResponse). Особое внимание уделено безопасности - пароль не сериализуется в JSON, используется специальный
-//тип для хранения массива избранного.
+// The module defines data structures for managing users. The key object, User, contains complete user information:
+// unique identifier, username, role (user/admin), creation time, and a list of favorite items.
+// Implements a role system with clear access control, structures for authentication (LoginRequest), and post-login responses (LoginResponse).
+// Special attention is given to security - passwords are not serialized in JSON, and a dedicated type is used for storing the favorites array.
 
 package models
 

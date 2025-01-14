@@ -1,6 +1,6 @@
-//Компонент для изменения ширины боковой панели путем перетаскивания.
-//Реализует ограничения минимальной (200px) и максимальной (350px) ширины,
-//визуальную индикацию активного состояния и плавные анимации при наведении.
+// A component for resizing the sidebar width by dragging.
+// Implements minimum (200px) and maximum (350px) width constraints,
+// visual indication of the active state, and smooth animations on hover.
 
 import React, { useState } from 'react';
 

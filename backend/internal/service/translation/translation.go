@@ -1,7 +1,7 @@
-//Сервис перевода, обеспечивающий поддержку мультиязычности в приложении.
-//Реализует кэширование переводов для оптимизации производительности, обработку ошибок
-//и проверку доступности сервиса перевода. Поддерживает перевод между всеми основными
-//языками системы (русский, английский, французский, немецкий, испанский).
+// A translation service that provides multilingual support in the application.
+// Implements translation caching for performance optimization, error handling, and translation service availability checks.
+// Supports translation between all major system languages (Russian, English, French, German, Spanish).
+
 
 package translation
 

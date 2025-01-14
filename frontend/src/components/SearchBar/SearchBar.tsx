@@ -1,6 +1,6 @@
-//Компонент поисковой строки для фильтрации минералов по названию.
-//Представляет собой простое текстовое поле с автоматической передачей введенного значения в родительский компонент через callback-функцию.
-//Использует стилизацию Tailwind CSS для визуального оформления и интерактивных состояний.
+// A search bar component for filtering minerals by name.
+// Represents a simple text field with automatic passing of the entered value to the parent component via a callback function.
+// Uses Tailwind CSS for visual styling and interactive states.
 
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';

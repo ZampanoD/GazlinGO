@@ -1,6 +1,7 @@
-//Контекст React для централизованного управления уведомлениями в приложении.
-//Предоставляет провайдер и хук useNotification для удобного доступа к функционалу показа уведомлений из любого компонента.
-// Использует систему уникальных идентификаторов для корректного отображения множественных уведомлений.
+// A React context for centralized management of notifications in the application.
+// Provides a provider and the `useNotification` hook for convenient access to notification functionality from any component.
+// Uses a unique ID system to ensure proper display of multiple notifications.
+
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Toast } from './Toast';

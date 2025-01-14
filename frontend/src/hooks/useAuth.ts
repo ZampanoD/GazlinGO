@@ -1,6 +1,6 @@
-//Хук для управления аутентификацией, который проверяет наличие токена и роли пользователя в localStorage.
-// Предоставляет информацию о статусе аутентификации пользователя и его административных правах.
-// Используется для контроля доступа к различным частям приложения.
+// A hook for managing authentication, which checks for the presence of a token and user role in localStorage.
+// Provides information about the user's authentication status and administrative privileges.
+// Used to control access to various parts of the application.
 
 export const useAuth = () => {
     const token = localStorage.getItem('token')

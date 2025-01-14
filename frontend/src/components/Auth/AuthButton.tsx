@@ -1,6 +1,7 @@
-//Компонент, реализующий функциональность аутентификации и управления пользовательским сеансом.
-//Включает формы входа и регистрации, модальные окна для подтверждения выхода, выпадающее меню профиля и обработку различных состояний авторизации.
-//Использует градиентные стили и анимации для улучшения визуального восприятия, а также содержит валидацию форм и обработку ошибок.
+// A component that implements authentication and user session management functionality.
+// Includes login and registration forms, logout confirmation modals, a profile dropdown menu, and handling of various authorization states.
+// Uses gradient styles and animations to enhance visual appeal, and includes form validation and error handling.
+
 
 import { useState, useRef, useEffect } from 'react';
 import { api, AxiosError } from '../../services/api';

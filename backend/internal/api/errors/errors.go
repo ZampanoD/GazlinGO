@@ -1,7 +1,7 @@
-// Централизованный модуль обработки и стандартизации ошибок в приложении.
-//Определяет кастомные типы ошибок для различных сценариев: аутентификация, валидация данных, файловые операции.
-//Обеспечивает единообразное форматирование HTTP-ответов об ошибках, включая статус-коды, информативные сообщения и трассировку для отладки.
-//Служит ключевым компонентом для создания предсказуемого и безопасного API.
+// A centralized module for handling and standardizing errors in the application.
+// Defines custom error types for various scenarios: authentication, data validation, file operations.
+// Ensures consistent formatting of HTTP error responses, including status codes, informative messages, and traceability for debugging.
+// Serves as a key component for creating a predictable and secure API.
 
 package errors
 

@@ -1,3 +1,8 @@
+// A modal component for editing existing mineral entries.
+// Implements the upload of 3D models and preview images, as well as updating data via the API.
+// Includes field validation, integration with the notification system, and Markdown support for descriptions.
+
+
 import React, { useState } from 'react';
 import { api } from '../services/api';
 import { useNotification } from '../components/Notification/NotificationContext';

@@ -1,6 +1,6 @@
-//Модуль подключения и конфигурации базы данных PostgreSQL, реализующий паттерн репозитория.
-//Обеспечивает гибкую настройку параметров подключения через переменные окружения с поддержкой как локального развертывания,
-//так и работы в Docker-контейнере. Включает базовую обработку ошибок и управление пулом соединений для оптимальной производительности.
+// A module for connecting and configuring a PostgreSQL database, implementing the repository pattern.
+// Provides flexible connection parameter configuration via environment variables, specifically optimized for Docker container deployment.
+// Includes basic error handling and connection pool management for optimal performance.
 
 package database
 

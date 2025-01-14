@@ -1,9 +1,7 @@
-//Компонент для отображения списка минералов в боковой панели приложения.
-//Реализует отзывчивый интерфейс с предпросмотром изображений, анимированными состояниями загрузки (skeleton loading)
-//И условным рендерингом кнопок управления для администраторов.
-//Включает обработку ошибок загрузки изображений с fallback на placeholder,
-//поддержку hover-эффектов и оптимизацию производительности через правильную обработку событий.
-//Особое внимание уделено доступности и пользовательскому опыту с анимированными переходами и четкой визуальной иерархией
+// A component for displaying a list of minerals in the application's sidebar.
+// Supports loading animations (skeleton loading), preview images, and error handling with a fallback to a placeholder.
+// Includes conditional rendering of control buttons (edit and delete) for administrators.
+// Optimized for performance with hover effects and proper event handling.
 
 import { useAuth } from '../hooks/useAuth'
 import React from 'react';

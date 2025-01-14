@@ -1,8 +1,8 @@
-//Центральная точка входа для backend-приложения, написанного на Go с использованием Fiber.
-//Основные задачи включают полную инициализацию системы: загрузку переменных окружения, подключение к базе данных PostgreSQL,
-//настройку файлового сервиса и создание HTTP-сервера с middleware для аутентификации, логирования и обработки CORS.
-//Принципиальные моменты - строгая проверка конфигурации (обязательность JWT_SECRET),
-//динамическое создание директории для хранения файлов и настройка безопасного роутинга с разделением прав доступа между пользователями и администраторами.
+// The entry point for the backend application written in Go using Fiber.
+// Main tasks include full system initialization: loading environment variables, connecting to a PostgreSQL database,
+// configuring the file service, and setting up an HTTP server with middleware for authentication, logging, and CORS handling.
+// Key aspects include strict configuration validation (JWT_SECRET is mandatory),
+// dynamic creation of a directory for file storage, and secure routing with access control separation between users and administrators.
 
 package main
 

@@ -1,7 +1,8 @@
-//Центральный модуль обработки HTTP-эндпоинтов, который консолидирует логику взаимодействия между клиентским запросом и серверной бизнес-логикой.
-//Содержит маршрутизацию для основных операций с минералами: создание, получение, обновление и удаление.
-//Реализует comprehensive error handling, форматирование ответов, валидацию входящих данных и интеграцию с сервисными слоями приложения.
-//Использует идиоматические подходы Go для построения RESTful API с четким разделением ответственности.
+// A central module for processing HTTP endpoints, consolidating the logic between client requests and server-side business logic.
+// Includes routing for core mineral operations: creation, retrieval, updating, and deletion.
+// Implements comprehensive error handling, response formatting, input validation, and integration with application service layers.
+// Uses idiomatic Go approaches to build a RESTful API with clear separation of responsibilities.
+
 
 package handler_fiber
 

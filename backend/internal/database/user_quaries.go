@@ -1,7 +1,6 @@
-//Модуль управления пользовательскими данными, который инкапсулирует логику аутентификации, регистрации
-//и работы с профилями пользователей. Реализует криптографически безопасные методы хеширования паролей,
-//проверки учетных записей и управления правами доступа. Использует транзакционные механизмы для обеспечения целостности
-//данных при регистрации и обновлении профилей, с детальной обработкой возможных сценариев ошибок и уникальных ограничений базы данных.
+// A module for managing user data, encapsulating authentication, registration, and user profile logic.
+// Implements cryptographically secure password hashing, account verification, and access control management.
+// Uses transactional mechanisms to ensure data integrity during registration and profile updates, with detailed handling of potential error scenarios and database constraints.
 
 package database
 

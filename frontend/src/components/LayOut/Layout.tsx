@@ -1,3 +1,9 @@
+// The main component for displaying the page layout.
+// Includes a sidebar with navigation, a list of minerals, and sorting controls.
+// Implements the display of 3D models, adding to favorites, and managing modal windows.
+// Supports responsive design for mobile devices and integration with the notification system.
+// Special attention is given to performance and user interface convenience.
+
 import { useState, useEffect, useCallback, useRef} from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import ModelViewer from '../ModelViewer'

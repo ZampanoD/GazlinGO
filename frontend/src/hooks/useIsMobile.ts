@@ -1,6 +1,6 @@
-//Хук для определения типа устройства пользователя на основе ширины экрана.
-// Отслеживает изменение размера окна браузера и определяет мобильное устройство при ширине экрана менее 768 пикселей.
-// Используется для адаптивной верстки и conditional rendering компонентов.
+// A hook for determining the user's device type based on screen width.
+// Tracks changes in the browser window size and identifies a mobile device when the screen width is less than 768 pixels.
+// Used for responsive design and conditional rendering of components.
 
 import { useState, useEffect } from 'react';
 

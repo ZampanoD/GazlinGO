@@ -1,8 +1,7 @@
-//Сложный компонент для интерактивного отображения 3D-моделей минералов с использованием Three.js и React Three Fiber.
-//Включает расширенные возможности управления: автоматическое вращение, улучшенное освещение, настраиваемую сетку и темную тему.
-//Реализует систему управления камерой через OrbitControls, динамическую загрузку моделей с индикатором прогресса, систему теней и кастомное освещение.
-//Поддерживает добавление в избранное для авторизованных пользователей с анимированной звездочкой и панель управления с настройками визуализации.
-// Особое внимание уделено производительности через использование Suspense и правильную обработку ресурсов Three.js.
+// A complex component for interactive display of 3D mineral models using Three.js and React Three Fiber.
+// Includes advanced control features: auto-rotation, enhanced lighting, customizable grid, and dark theme.
+// Implements camera control via OrbitControls, dynamic model loading with a progress indicator, a shadow system, and custom lighting.
+// Supports adding to favorites for authenticated users with an animated star, and a control panel with visualization settings.
 
 
 import React, { useEffect, useState, Suspense, useRef } from 'react';

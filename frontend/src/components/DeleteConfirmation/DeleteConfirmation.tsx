@@ -1,5 +1,6 @@
-//Модальный компонент для подтверждения удаления минерала из системы.
-//Реализует паттерн подтверждения действия с двумя опциями (подтверждение/отмена).
+// A modal component for confirming the deletion of a mineral from the system.
+// Implements an action confirmation pattern with two options (confirm/cancel).
+
 
 import React, { useState } from 'react';
 import { useEscapeKey } from '../../hooks/useEscapeKey';

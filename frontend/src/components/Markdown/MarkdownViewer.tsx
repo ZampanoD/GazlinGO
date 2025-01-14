@@ -1,3 +1,7 @@
+// A component for rendering Markdown content with customizable styling.
+// Uses `ReactMarkdown` to parse and display Markdown text.
+// Supports Tailwind CSS classes for customizing the appearance of the rendered content.
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 

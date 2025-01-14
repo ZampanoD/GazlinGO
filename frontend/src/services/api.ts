@@ -1,6 +1,7 @@
-//Модуль конфигурации Axios для взаимодействия с backend API приложения.
-//Настраивает базовый URL для запросов, добавляет перехватчик для автоматического включения JWT-токена в заголовки авторизации и экспортирует методы для работы с избранными минералами.
-//Реализует централизованное управление HTTP-запросами с поддержкой типизации TypeScript для улучшенной обработки ошибок.
+// An Axios configuration module for interacting with the application's backend API.
+// Sets the base URL for requests, adds an interceptor to automatically include the JWT token in authorization headers, and exports methods for working with favorite minerals.
+// Implements centralized management of HTTP requests with TypeScript typing support for improved error handling.
+
 
 import axios, { AxiosRequestConfig, AxiosError } from 'axios'
 

@@ -1,7 +1,7 @@
-//Структура данных для работы с минералами, реализованная с учетом принципов типобезопасности Go.
-//Определяет модель Mineral с полями: уникальный идентификатор, название, описание, пути к превью и 3D-модели,
-//временная метка создания. Использует теги struct mapping для гибкой сериализации/десериализации между форматами JSON
-//и базы данных. Поддерживает расширяемость через необязательные поля и строгую типизацию.
+// A data structure for working with minerals, implemented with Go's type safety principles in mind.
+// Defines the Mineral model with fields: unique identifier, title, description, paths to preview and 3D model, and creation timestamp.
+// Uses struct tags for flexible serialization/deserialization between JSON and database formats.
+// Supports extensibility through optional fields and strict typing.
 
 package models
 

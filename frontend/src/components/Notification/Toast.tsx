@@ -1,6 +1,6 @@
-//Компонент уведомлений, отображающий всплывающие сообщения об успешных действиях или ошибках.
-//Включает анимированный индикатор прогресса, автоматическое закрытие по таймеру и возможность ручного закрытия.
-//Поддерживает два типа уведомлений: успех (зеленый) и ошибка (красный)
+// A notification component that displays pop-up messages for successful actions or errors.
+// Includes an animated progress indicator, automatic closing by timer, and the ability to manually close notifications.
+// Supports two types of notifications: success (green) and error (red).
 
 import React, { useEffect } from 'react';
 

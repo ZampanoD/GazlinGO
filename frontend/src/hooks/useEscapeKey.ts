@@ -1,6 +1,6 @@
-//Пользовательский хук React для обработки нажатия клавиши Escape.
-// Принимает функцию обратного вызова, которая выполняется при нажатии клавиши, и автоматически очищает слушатель события при размонтировании компонента.
-// Часто используется для закрытия модальных окон и других интерактивных элементов.
+// A custom React hook for handling the Escape key press.
+// Accepts a callback function that is executed when the key is pressed and automatically cleans up the event listener when the component unmounts.
+// Commonly used for closing modal windows and other interactive elements.
 
 import { useEffect } from 'react';
 

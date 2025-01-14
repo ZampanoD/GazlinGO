@@ -1,8 +1,7 @@
-//Middleware-модуль аутентификации, который перехватывает и обрабатывает HTTP-запросы для проверки прав доступа.
-//Реализует механизм JWT-токенизации с валидацией подписи, извлечением claims и разграничением
-//доступа между ролями пользователей. Обеспечивает криптографическую безопасность через проверку целостности токена,
-//время жизни и привязку к конкретному пользователю.
-//Интегрирован с механизмами Fiber для seamless внедрения в HTTP-pipeline приложения.
+// An authentication middleware module that intercepts and processes HTTP requests to verify access rights.
+// Implements a JWT tokenization mechanism with signature validation, claims extraction, and role-based access control.
+// Ensures cryptographic security through token integrity checks, expiration validation, and user binding.
+// Integrated with Fiber mechanisms for seamless embedding into the application's HTTP pipeline.
 
 package middleware
 

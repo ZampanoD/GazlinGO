@@ -1,7 +1,6 @@
-//Обработчики HTTP-запросов для работы с переводами минералов. Реализует получение,
-//поиск и отображение минералов на разных языках с поддержкой перевода между любыми
-//поддерживаемыми языками. Включает комплексную обработку ошибок и логирование всех
-//операций перевода.
+// HTTP request handlers for working with mineral translations.
+// Implements fetching, searching, and displaying minerals in different languages with support for translation between any supported languages.
+// Includes comprehensive error handling and logging of all translation operations.
 
 package handler_fiber
 

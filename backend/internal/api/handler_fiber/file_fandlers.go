@@ -1,6 +1,6 @@
-//Специализированный обработчик файловых операций, отвечающий за загрузку, сохранение и управление мультимедийным контентом минералов.
-//Реализует robust механизмы работы с файлами: валидация расширений, контроль размера, генерация уникальных имен, безопасное сохранение на файловой системе.
-//Интегрирует логику файлового сервиса с HTTP-протоколом, обеспечивая безопасную и эффективную работу с превью и 3D-моделями минералов.
+// A specialized handler for file operations, responsible for uploading, saving, and managing mineral multimedia content.
+// Implements robust file handling mechanisms: extension validation, size control, unique name generation, and secure storage on the file system.
+// Integrates file service logic with the HTTP protocol, ensuring secure and efficient handling of mineral previews and 3D models.
 
 package handler_fiber
 

@@ -1,6 +1,7 @@
-//Модуль, реализующий CRUD-операции для работы с минералами в базе данных. Содержит методы для получения списка минералов,
-//поиска по названию, создания, обновления(не реализовано) и удаления записей, с корректной обработкой ошибок и возвратом структурированных данных.
-//Реализует эффективные SQL-запросы с использованием подготовленных выражений для безопасной работы с данными.
+// A module implementing CRUD operations for working with minerals in the database.
+// Contains methods for retrieving a list of minerals, searching by name, creating, updating, and deleting records, with proper error handling and structured data return.
+// Implements efficient SQL queries using prepared statements for secure data operations.
+
 
 package database
 

@@ -1,3 +1,8 @@
+// A component for editing Markdown content with a rich toolbar for formatting.
+// Provides buttons for common Markdown syntax (bold, italic, links, headings, lists, etc.).
+// Supports real-time updates and integration with a parent component for handling changes.
+// Includes tooltips for each toolbar button, translated using the language context.
+
 import React, { useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Bold, Italic, Link, Heading2, Heading3, List, ListOrdered } from 'lucide-react';

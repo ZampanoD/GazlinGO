@@ -1,6 +1,6 @@
-//Сервисный слой абстракции файловых операций, который инкапсулирует низкоуровневую логику работы с файловой системой.
-//Предоставляет высокоуровневые методы для безопасного создания, чтения, обновления и удаления файлов с учетом бизнес-требований приложения.
-//Реализует механизмы генерации уникальных имен, проверки типов и размеров файлов, а также управления путями хранения для различных типов контента.
+// A service layer abstraction for file operations, encapsulating low-level file system logic.
+// Provides high-level methods for safe creation, reading, updating, and deletion of files, considering the application's business requirements.
+// Implements mechanisms for generating unique names, validating file types and sizes, and managing storage paths for different content types.
 
 package file
 

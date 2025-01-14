@@ -1,7 +1,8 @@
-//Компонент-предохранитель для отлова и обработки ошибок рендеринга в React-приложении.
-//Реализует паттерн Error Boundary, который позволяет обрабатывать ошибки во время рендеринга, предотвращая полное падение приложения.
-//Включает логирование ошибок в консоль для отладки и отображает пользовательское сообщение об ошибке вместо сломанного интерфейса.
-// Является критически важным компонентом для обеспечения стабильности приложения в производственной среде.
+// An error boundary component for catching and handling rendering errors in a React application.
+// Implements the Error Boundary pattern, which allows handling errors during rendering, preventing the entire application from crashing.
+// Includes logging errors to the console for debugging and displays a user-friendly error message instead of a broken interface.
+// A critical component for ensuring application stability in a production environment.
+
 
 import { Component, ErrorInfo, ReactNode } from 'react'
 

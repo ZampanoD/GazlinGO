@@ -1,7 +1,7 @@
-//Специализированный обработчик аутентификационных маршрутов, который управляет процессами регистрации,
-//входа и выхода пользователей. Реализует криптографически защищенные механизмы генерации JWT-токенов,
-//хеширования паролей и валидации учетных данных. Интегрирует бизнес-логику аутентификации с HTTP-протоколом,
-//обеспечивая безопасное управление пользовательскими сессиями и контролем доступа к защищенным ресурсам приложения.
+// A specialized handler for authentication routes, managing user registration, login, and logout processes.
+// Implements cryptographically secure mechanisms for JWT token generation, password hashing, and credential validation.
+// Integrates authentication business logic with the HTTP protocol, ensuring secure management of user sessions
+// and access control to protected application resources.
 
 package handler_fiber
 

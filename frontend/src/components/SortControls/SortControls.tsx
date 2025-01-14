@@ -1,6 +1,6 @@
-//Компонент выпадающего списка для сортировки минералов по различным критериям (алфавит, дата, избранное).
-//Адаптируется к правам пользователя, показывая опцию избранного только для авторизованных пользователей.
-//Интегрируется с системой переводов для отображения опций сортировки на выбранном языке.
+// A dropdown component for sorting minerals by various criteria (alphabet, date, favorites).
+// Adapts to user permissions, showing the favorites option only for authenticated users.
+// Integrates with the translation system to display sorting options in the selected language.
 
 import React from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';

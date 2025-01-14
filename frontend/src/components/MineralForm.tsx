@@ -1,8 +1,7 @@
-//Модальный компонент для создания новых записей о минералах, доступный только администраторам.
-//Реализует загрузку 3D-моделей в формате GLB и изображений предпросмотра с валидацией типов файлов и обязательных полей.
-//Включает продвинутую обработку ошибок, интеграцию с системой уведомлений.
-//Использует FormData для отправки файлов на сервер и поддерживает отзывчивый дизайн с прокруткой для больших форм.
-//Особое внимание уделено пользовательскому опыту с подробными подсказками и визуальной обратной связью.
+// A modal component for creating new mineral entries, available only to administrators.
+// Implements the upload of GLB-format 3D models and preview images with file type validation and required fields.
+// Includes advanced error handling and integration with the notification system.
+// Uses FormData to send files to the server and supports responsive design with scrolling for large forms.
 
 import { useState } from 'react'
 import { api, AxiosError } from '../services/api'
