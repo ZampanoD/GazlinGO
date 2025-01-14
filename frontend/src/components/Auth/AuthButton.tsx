@@ -2,15 +2,15 @@
 //Включает формы входа и регистрации, модальные окна для подтверждения выхода, выпадающее меню профиля и обработку различных состояний авторизации.
 //Использует градиентные стили и анимации для улучшения визуального восприятия, а также содержит валидацию форм и обработку ошибок.
 
-import { useState, useRef, useEffect } from 'react'
-import { api, AxiosError } from '../../services/api'
-import { useAuth } from '../../hooks/useAuth'
-import { useEscapeKey } from '../../hooks/useEscapeKey'
+import { useState, useRef, useEffect } from 'react';
+import { api, AxiosError } from '../../services/api';
+import { useAuth } from '../../hooks/useAuth';
+import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 interface LoginResponse {
-    token: string
-    role: string
+    token: string;
+    role: string;
 }
 
 const ConfirmLogout = ({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) => {
@@ -45,135 +45,152 @@ const ConfirmLogout = ({ onConfirm, onCancel }: { onConfirm: () => void; onCance
 };
 
 export const AuthButton = () => {
-    const { isAuthenticated } = useAuth()
-    const [showModal, setShowModal] = useState(false)
-    const [showDropdown, setShowDropdown] = useState(false)
-    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
-    const [isLogin, setIsLogin] = useState(true)
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState('')
-    const dropdownRef = useRef<HTMLDivElement>(null)  // добавляем ref для дропдауна
-    const buttonRef = useRef<HTMLButtonElement>(null)
+    const { isAuthenticated } = useAuth();
+    const [showModal, setShowModal] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
     const { t } = useLanguage();
 
-    const currentUser = localStorage.getItem('username')
+    const currentUser = localStorage.getItem('username');
+
+    // Сохраняем позицию прокрутки
+    const scrollPositionRef = useRef(0);
+
+    // Блокируем прокрутку при открытии модального окна
+    useEffect(() => {
+        if (showModal || showLogoutConfirm) {
+            scrollPositionRef.current = window.scrollY;
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+            window.scrollTo(0, scrollPositionRef.current);
+        }
+    }, [showModal, showLogoutConfirm]);
 
     const validateForm = () => {
         if (!username.trim()) {
-            setError(t('enterUsername'))
-            return false
+            setError(t('enterUsername'));
+            return false;
         }
         if (!password.trim()) {
-            setError(t('enterPassword'))
-            return false
+            setError(t('enterPassword'));
+            return false;
         }
         if (!isLogin && password.length < 6) {
-            setError(t('passwordLength'))
-            return false
+            setError(t('passwordLength'));
+            return false;
         }
         if (!isLogin && password !== confirmPassword) {
-            setError(t('passwordsNotMatch'))
-            return false
+            setError(t('passwordsNotMatch'));
+            return false;
         }
-        setError('')
-        return true
-    }
+        setError('');
+        return true;
+    };
 
     const handleLogoutClick = () => {
-        setShowDropdown(false)
-        setShowLogoutConfirm(true)
-    }
+        setShowDropdown(false);
+        setShowLogoutConfirm(true);
+    };
 
     const handleLogoutConfirm = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('role')
-        localStorage.removeItem('username')
-        setShowLogoutConfirm(false)
-        window.location.reload()
-    }
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('username');
+        setShowLogoutConfirm(false);
+        window.location.reload();
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!validateForm()) return
+        e.preventDefault();
+        if (!validateForm()) return;
 
         try {
             const response = await api.post<LoginResponse>('/login', {
                 username: username.trim(),
-                password: password.trim()
-            })
+                password: password.trim(),
+            });
 
-            localStorage.setItem('token', response.data.token)
-            localStorage.setItem('role', response.data.role)
-            localStorage.setItem('username', username.trim())
-            setShowModal(false)
-            window.location.reload()
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('role', response.data.role);
+            localStorage.setItem('username', username.trim());
+            setShowModal(false);
+            window.location.reload();
         } catch (error) {
             if (error instanceof AxiosError) {
-                setError(error.response?.data.error || 'Ошибка авторизации')
+                setError(error.response?.data.error || 'Ошибка авторизации');
             }
         }
-    }
+    };
 
     const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!validateForm()) return
+        e.preventDefault();
+        if (!validateForm()) return;
 
         try {
             const response = await api.post<LoginResponse>('/register', {
                 username: username.trim(),
                 password: password.trim(),
-                role: "user"
-            })
+                role: 'user',
+            });
 
-            localStorage.setItem('token', response.data.token)
-            localStorage.setItem('role', response.data.role)
-            localStorage.setItem('username', username.trim())
-            setShowModal(false)
-            window.location.reload()
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('role', response.data.role);
+            localStorage.setItem('username', username.trim());
+            setShowModal(false);
+            window.location.reload();
         } catch (error) {
             if (error instanceof AxiosError) {
-                setError(error.response?.data.error || 'Ошибка регистрации')
+                setError(error.response?.data.error || 'Ошибка регистрации');
             }
         }
-    }
+    };
 
     const closeModal = () => {
-        setShowModal(false)
-        setError('')
-        setUsername('')
-        setPassword('')
-        setConfirmPassword('')
-    }
+        setShowModal(false);
+        setError('');
+        setUsername('');
+        setPassword('');
+        setConfirmPassword('');
+    };
+
     const handleButtonClick = () => {
-        setShowDropdown(!showDropdown)
-    }
+        setShowDropdown(!showDropdown);
+    };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current &&
+            if (
+                dropdownRef.current &&
                 buttonRef.current &&
                 !dropdownRef.current.contains(event.target as Node) &&
-                !buttonRef.current.contains(event.target as Node)) {
-                setShowDropdown(false)
+                !buttonRef.current.contains(event.target as Node)
+            ) {
+                setShowDropdown(false);
             }
-        }
+        };
 
-        document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    }, [])
-
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     useEscapeKey(() => {
         if (showLogoutConfirm) {
-            setShowLogoutConfirm(false)
+            setShowLogoutConfirm(false);
         }
         if (showModal) {
-            closeModal()
+            closeModal();
         }
-    })
+    });
 
     return (
         <div className="relative">
@@ -194,8 +211,8 @@ export const AuthButton = () => {
                         >
                             <button
                                 onClick={() => {
-                                    handleLogoutClick()
-                                    setShowDropdown(false)
+                                    handleLogoutClick();
+                                    setShowDropdown(false);
                                 }}
                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                             >
@@ -269,8 +286,8 @@ export const AuthButton = () => {
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            setIsLogin(!isLogin)
-                                            setError('')
+                                            setIsLogin(!isLogin);
+                                            setError('');
                                         }}
                                         className="text-blue-500 hover:text-blue-600 text-sm w-full"
                                     >
@@ -286,18 +303,17 @@ export const AuthButton = () => {
             {showLogoutConfirm && (
                 <ConfirmLogout
                     onConfirm={() => {
-                        handleLogoutConfirm()
-                        setShowDropdown(false)
+                        handleLogoutConfirm();
+                        setShowDropdown(false);
                     }}
                     onCancel={() => {
-                        setShowLogoutConfirm(false)
-                        setShowDropdown(false)
+                        setShowLogoutConfirm(false);
+                        setShowDropdown(false);
                     }}
                 />
             )}
         </div>
     );
 };
-
 
 export default AuthButton;

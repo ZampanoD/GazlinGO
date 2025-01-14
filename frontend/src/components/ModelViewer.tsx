@@ -243,6 +243,7 @@ const ControlPanel = ({ children, darkTheme }: { children: React.ReactNode; dark
     );
 };
 
+
 const ModelViewer: React.FC<ModelViewerProps> = ({
                                                      modelPath,
                                                      mineralId,
@@ -263,14 +264,40 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     };
 
     const currentModelPath = isDefaultModel ? DEFAULT_MODEL.path : (modelPath || DEFAULT_MODEL.path);
-    console.log('ModelViewer using path:', currentModelPath);
+
+
+
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const preventTextSelection = (e: PointerEvent) => {
+            if (e.buttons === 1) {
+                e.preventDefault();
+            }
+        };
+
+        container.addEventListener('pointerdown', preventTextSelection);
+        container.addEventListener('pointermove', preventTextSelection);
+
+        return () => {
+            container.removeEventListener('pointerdown', preventTextSelection);
+            container.removeEventListener('pointermove', preventTextSelection);
+        };
+    }, []);
 
     if (error) {
         return <div className="flex justify-center items-center h-full text-red-500">{error}</div>;
     }
 
     return (
-        <div className="relative w-full h-full border-2 border-gray-200 rounded-lg">
+        <div
+            ref={containerRef}
+            className="relative w-full h-full border-2 border-gray-200 rounded-lg"
+            onPointerDown={(e) => e.preventDefault()} // Предотвращаем выделение текста
+        >
             {isAuthenticated && onFavoriteToggle && mineralId && !isDefaultModel && (
                 <FavoriteStar
                     isFavorite={isFavorite}
@@ -304,10 +331,10 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
             <Canvas
                 shadows
                 dpr={[1, 2]}
-                camera={{position: [0, 2, 5], fov: 45}}
-                style={{background: darkTheme ? '#111827' : '#ffffff'}}
+                camera={{ position: [0, 2, 5], fov: 45 }}
+                style={{ background: darkTheme ? '#111827' : '#ffffff' }}
             >
-                <Suspense fallback={<LoadingSpinner/>}>
+                <Suspense fallback={<LoadingSpinner />}>
                     <Lights enhanced={enhancedLighting} />
                     <Model
                         url={currentModelPath}

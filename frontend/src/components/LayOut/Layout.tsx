@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef} from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import ModelViewer from '../ModelViewer'
 import { api } from '../../services/api'
@@ -55,6 +55,17 @@ const Layout = () => {
     const { currentLanguage } = useLanguage();
     const { t } = useLanguage();
     const [mineralToEdit, setMineralToEdit] = useState<Mineral | null>(null);
+    const isAnyModalOpen = showMineralForm || !!mineralToDelete || !!mineralToEdit;
+    const scrollPositionRef = useRef(0);
+    useEffect(() => {
+        if (isAnyModalOpen) {
+            scrollPositionRef.current = window.scrollY;
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+            window.scrollTo(0, scrollPositionRef.current);
+        }
+    }, [isAnyModalOpen]);
 
     const handleEditClick = (mineral: Mineral) => {
         setMineralToEdit(mineral);
