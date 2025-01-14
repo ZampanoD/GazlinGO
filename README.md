@@ -1,141 +1,149 @@
-# 🌍 GazlinGO - Информационная система для работы с 3D моделями минералов
+# 🌍 GazlinGO - Information System for Working with 3D Mineral Models
 
-GazlinGO - это веб-приложение для интерактивного просмотра и управления коллекцией 3D-моделей минералов. Система предоставляет удобный интерфейс для работы с трехмерными моделями, их описаниями и классификацией. Разработана с использованием современного стека технологий.
+GazlinGO is a web application for interactive viewing and managing a collection of 3D mineral models. The system provides a user-friendly interface for working with 3D models, their descriptions, and classification. Developed using a modern technology stack.
 
-## ✨ Основные возможности
+## ✨ Key Features
 
-- 👀 Интерактивный просмотр 3D-моделей минералов
-- 🔒 Система аутентификации и авторизации (пользователи/администраторы)
-- ⚡ Управление коллекцией минералов (CRUD-операции для администраторов)
-- ⭐ Добавление минералов в избранное
-- 🔍 Поиск и сортировка минералов
-- 🎛️ Настраиваемый 3D-viewer:
-    - Автоматическое вращение
-    - Улучшенное освещение
-    - Координатная сетка
-    - Темная тема
-- 📱 Адаптивный интерфейс для всех устройств
-- 🌐 Мультиязычный интерфейс:
-    - Русский
-    - Английский
-    - Французский
-    - Немецкий
-    - Испанский
+- 👀 Interactive viewing of 3D mineral models
+- 🔒 Authentication and authorization system (users/admins)
+- ⚡ Mineral collection management (CRUD operations for admins)
+- ⭐ Adding minerals to favorites
+- 🔍 Search and sorting of minerals
+- 🎛️ Customizable 3D viewer:
+  - Auto-rotation
+  - Enhanced lighting
+  - Coordinate grid
+  - Dark theme
+- 📱 Responsive interface for all devices
+- 🌐 Multilingual interface:
+  - Russian
+  - English
+  - French
+  - German
+  - Spanish
 
-## 🛠️ Технологический стек
+## 🛠️ Technology Stack
 
 ### Frontend
 - React
 - TypeScript
-- Three.js / React Three Fiber (для 3D)
-- Tailwind CSS (стилизация)
-- React Context (управление состоянием и локализацией)
-- Axios (HTTP-клиент)
+- Three.js / React Three Fiber (for 3D)
+- Tailwind CSS (styling)
+- React Context (state and localization management)
+- Axios (HTTP client)
 
 ### Backend
 - Go
-- Fiber (веб-фреймворк)
+- Fiber (web framework)
 - PostgreSQL
-- JWT (аутентификация)
-- Lingva Translate (для переводов)
+- JWT (authentication)
+- Lingva Translate (for translations)
 
-### Инфраструктура
+### Infrastructure
 - Docker
 - Docker Compose
 
-## 📁 Структура проекта
+## 📁 Project Structure
+
 
 ```
 project/
-├── frontend/          # React приложение
-├── backend/           # Go API сервер
-├── db/                # Файлы базы данных
-│   ├── init.sql      # Инициализация БД
-│   └── Dockerfile   
+├── frontend/        # React application
+├── backend/         # Go API server
+├── db/              # Database files
+│ ├── init.sql       # Database initialization
+│ └── Dockerfile
 └── docker-compose.yml
 ```
 
-## 🚀 Запуск проекта
+## 🚀 Running the Project
 
-### Требования
+### Requirements
 - Docker
 - Docker Compose
 
-### Установка
+### Installation
 
-1. Клонируем репозиторий:
+1. Clone the repository:
 ```bash
 git clone https://github.com/ZampanoD/GazlinGO.git
 cd gazlingo
 ```
 
-2. Создаем .env файл:
+2. Create a .env file:
 ```env
 JWT_SECRET=your_jwt_secret
 ```
 
-3. Запускаем через Docker Compose:
+3. Start with Docker Compose:
 ```bash
 docker-compose up -d
 ```
 
-4. Доступ к сервисам:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8080
-- База данных: localhost:5432
-- Сервис переводов: localhost:5050
+4. Access the services:
+
+     - Frontend: http://localhost:5173
+      - Backend API: http://localhost:8080
+      - Database: localhost:5432
+      - Translation service: localhost:5050
 
 ## 🔌 API Endpoints
 
-### Публичные
+### Public
 ```
-GET /api/v1/minerals            # Список минералов
-GET /api/v1/minerals/:id        # Детали минерала
-GET /api/v1/minerals-translated # Переведенный список
-GET /api/v1/languages          # Доступные языки
-POST /api/v1/register          # Регистрация
-POST /api/v1/login             # Вход
-```
-
-### Защищенные (требуют авторизации)
-```
-GET /api/v1/find-minerals      # Поиск
-POST /api/v1/favorites/:id     # Добавить в избранное
-DELETE /api/v1/favorites/:id   # Удалить из избранного
+GET /api/v1/minerals            # List of minerals
+GET /api/v1/minerals/:id        # Mineral details
+GET /api/v1/minerals-translated # Translated list
+GET /api/v1/languages          # Available languages
+POST /api/v1/register          # Registration
+POST /api/v1/login             # Login
+GET /api/v1/find-minerals      # Search
 ```
 
-### Административные
+### Protected (requires authentication)
 ```
-POST /api/v1/admin/minerals    # Создание
-PUT /api/v1/admin/minerals/:id # Обновление
-DELETE /api/v1/admin/minerals/:id # Удаление
+POST /api/v1/favorites/:id     # Add to favorites
+DELETE /api/v1/favorites/:id   # Remove from favorites
 ```
 
-## 💡 Особенности реализации
+### Administrative
+```
+POST /api/v1/admin/minerals    # Create
+PUT /api/v1/admin/minerals/:id # Update
+DELETE /api/v1/admin/minerals/:id # Delete
+```
 
-- 🏭 Оптимизированная сборка Docker
-- 🔄 Автоматические миграции БД
-- 🎮 Поддержка GLB моделей
-- 🔐 JWT аутентификация
-- 👥 Система ролей доступа
-- 📁 Файловый менеджмент
-- 🌍 Мультиязычность
+## 💡 Implementation Features
 
-## 🔒 Безопасность
+- 🏭 Optimized Docker builds
 
-- 🔑 Хеширование паролей (bcrypt)
-- 🎫 JWT токены
-- ✅ Валидация данных
-- 🛡️ CORS защита
-- 💉 Защита от SQL-инъекций
+- 🔄 Automatic database migrations
 
-## ⚡ Оптимизация
+- 🎮 GLB model support
+- 🔐 JWT authentication
+
+- 👥 Role-based access control
+
+- 📁 File management
+
+- 🌍 Multilingual support
+
+## 🔒 Security
+
+- 📦 Client-side caching
+- 📊 Database indexing
+- 🚀 Optimized Docker images
+- 🎯 Efficient 3D model loading
+
+
+
+## ⚡ Optimization
 
 - 📦 Кэширование на клиенте
 - 📊 Индексация БД
 - 🚀 Оптимизация Docker образов
 - 🎯 Эффективная загрузка 3D моделей
 
-## 👨‍💻 Автор
+## 👨‍💻 Author
 
-Дмитрий Любазнов
+Dmitry Lyubaznov
