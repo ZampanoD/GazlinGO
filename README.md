@@ -130,19 +130,20 @@ DELETE /api/v1/admin/minerals/:id # Delete
 
 ## 🔒 Security
 
-- 📦 Client-side caching
-- 📊 Database indexing
-- 🚀 Optimized Docker images
-- 🎯 Efficient 3D model loading
+- 🔑 Password hashing (bcrypt)
+- 🎫 JWT tokens
+- ✅ Data validation
+- 🛡️ CORS protection
+- 💉 Protection against SQL injections
 
 
 
 ## ⚡ Optimization
 
-- 📦 Кэширование на клиенте
-- 📊 Индексация БД
-- 🚀 Оптимизация Docker образов
-- 🎯 Эффективная загрузка 3D моделей
+- 📦 Client-side caching
+- 📊 Database indexing
+- 🚀 Optimized Docker images
+- 🎯 Efficient 3D model loading
 
 ## 👨‍💻 Author
 
